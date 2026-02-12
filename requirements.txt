@@ -1,0 +1,32 @@
+# Medical Data Integration Pipeline - Python Dependencies
+
+# Core FHIR handling
+fhir.resources==7.1.0
+
+# Data manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Data generation and validation
+Faker>=20.0.0
+pydantic>=2.0.0
+
+# Visualization and dashboard
+streamlit>=1.28.0
+plotly>=5.17.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Code quality
+black>=23.0.0
+flake8>=6.1.0
+
+# Jupyter for exploration
+jupyter>=1.0.0
+ipykernel>=6.25.0
+
+# Utilities
+python-dateutil>=2.8.0
+requests>=2.31.0
