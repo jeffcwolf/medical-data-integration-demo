@@ -1,0 +1,27 @@
+======================================================================
+Medical Data Integration Pipeline - Execution Summary
+======================================================================
+
+Execution Time: 2026-02-12T09:32:41.570551
+
+DATA QUALITY SUMMARY
+----------------------------------------------------------------------
+Total Patients:    200
+Total Conditions:  400
+Total Medications: 181
+Quality Score:     100.0/100
+Errors:            0
+Warnings:          2
+
+TRANSFORMATION SUMMARY
+----------------------------------------------------------------------
+Patients Transformed:  200/200 (100.0%)
+Conditions Transformed: 400/400 (100.0%)
+Medications Transformed: 181/181 (100.0%)
+
+Transformation Errors: 0
+
+DATA QUALITY ISSUES
+----------------------------------------------------------------------
+[WARNING] Birthdate: 26 dates could not be parsed
+[WARNING] Code: 34 invalid ICD-10 code formats
