@@ -12,8 +12,6 @@
 
 This project demonstrates a complete ETL (Extract, Transform, Load) pipeline that transforms messy hospital data into HL7 FHIR R4 compliant resources, using **official German MII (Medizininformatik-Initiative) test data**.
 
-**Purpose:** Created as a demonstration project for the **Data Engineer/Data Scientist position at BIH@Charité Datenintegrationszentrum**, showcasing capabilities in medical data transformation, FHIR standards, and data quality assurance.
-
 ### 🎯 Key Achievement
 
 **87.7% data recovery** from intentionally "broken" CSV files with realistic quality issues (format inconsistencies, missing values, German terminology variations).
@@ -365,7 +363,7 @@ GENDER_VARIATION_ENABLED = True # Introduce gender value variations
 
 ## 👤 Author
 
-**Created for:** BIH@Charité Datenintegrationszentrum Position Application
+**Created for:** BIH@Charité Datenintegrationszentrum
 
 **Demonstration of:**
 - Medical data ETL pipeline development
