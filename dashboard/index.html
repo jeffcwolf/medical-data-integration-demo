@@ -380,26 +380,82 @@
                     into HL7 FHIR R4 compliant resources, using official German MII test data from
                     the Medizininformatik-Initiative.
                 </p>
-
+                
                 <div class="highlight">
-                    <h3>🎯 "Reverse Engineering" Approach</h3>
-                    <p>Started with clean FHIR → Created messy CSV → Transformed back to clean FHIR → Validated against original</p>
+                    <h3>🎯 "Reverse Engineering" Approach for Validation</h3>
+                    <p style="margin-bottom: 20px;">
+                        Started with <strong>clean MII FHIR</strong> → Created <strong>messy CSV with realistic quality issues</strong> 
+                        → Transformed back to <strong>clean FHIR</strong> → Validated against <strong>original gold standard</strong>
+                    </p>
+                    
                     <div class="highlight-grid">
                         <div class="highlight-item">
                             <strong>Phase 1</strong>
-                            <span>FHIR → Messy CSV</span>
+                            <span>Extract & "Break"</span>
+                            <small style="display: block; margin-top: 5px; color: #718096;">FHIR → Messy CSV</small>
                         </div>
                         <div class="highlight-item">
                             <strong>Phase 2</strong>
-                            <span>Data Validation</span>
+                            <span>Transform & Clean</span>
+                            <small style="display: block; margin-top: 5px; color: #718096;">CSV → Clean FHIR</small>
                         </div>
                         <div class="highlight-item">
                             <strong>Phase 3</strong>
-                            <span>CSV → Clean FHIR</span>
+                            <span>Validate</span>
+                            <small style="display: block; margin-top: 5px; color: #718096;">Compare to Gold Standard</small>
                         </div>
                         <div class="highlight-item">
-                            <strong>Phase 4</strong>
-                            <span>Validation & QA</span>
+                            <strong>Result</strong>
+                            <span>Quality Dashboard</span>
+                            <small style="display: block; margin-top: 5px; color: #718096;">Metrics & Visualizations</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Quality Issues -->
+                    <div style="margin-top: 30px;">
+                        <h3>🔧 Data Quality Issues Handled</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">ID Formats</strong>
+                                <small style="color: #4a5568;">P-001, PAT001, 00001 → PAT-00001</small>
+                            </div>
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Date Formats</strong>
+                                <small style="color: #4a5568;">DD.MM.YYYY, YYYY-MM-DD → ISO 8601</small>
+                            </div>
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Gender Values</strong>
+                                <small style="color: #4a5568;">M, male, männlich → standardized</small>
+                            </div>
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Missing Data</strong>
+                                <small style="color: #4a5568;">10-15% nulls → handled gracefully</small>
+                            </div>
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">German Characters</strong>
+                                <small style="color: #4a5568;">ä, ö, ü, ß → UTF-8 encoding</small>
+                            </div>
+                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
+                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Reference Integrity</strong>
+                                <small style="color: #4a5568;">Invalid IDs → logged & flagged</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tech Stack -->
+                    <div style="margin-top: 25px; padding: 15px; background: #f7fafc; border-left: 4px solid #4299e1; border-radius: 4px;">
+                        <div style="margin-bottom: 8px;">
+                            <strong style="color: #2d3748;">Tech Stack:</strong> 
+                            <span style="color: #4a5568;">Python • pandas • fhir.resources (FHIR R4) • pytest • Streamlit</span>
+                        </div>
+                        <div>
+                            <strong style="color: #2d3748;">Data Source:</strong> 
+                            <a href="https://github.com/medizininformatik-initiative/kerndatensatz-testdaten" 
+                               target="_blank" 
+                               style="color: #4299e1; text-decoration: none;">
+                                Official MII Kerndatensatz Test Data
+                            </a>
+                            <span style="color: #718096;"> (1,650 FHIR bundles)</span>
                         </div>
                     </div>
                 </div>
