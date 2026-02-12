@@ -8,6 +8,24 @@
 
 ---
 
+## 🌐 Live Demo
+
+**Interactive Quality Dashboard:**
+- 📊 [View on GitHub Pages](https://jeffcwolf.github.io/medical-data-integration-demo/)
+- 📊 [View on Codeberg Pages](https://research_coder.codeberg.page/medical-data-integration-demo/)
+
+The dashboard showcases:
+- Data quality metrics (before/after transformation)
+- Validation results against MII Kerndatensatz profiles
+- Transformation statistics
+- Interactive visualizations
+
+**Source Code:**
+- [GitHub Repository](https://github.com/jeffcwolf/medical-data-integration-demo)
+- [Codeberg Repository](https://codeberg.org/research_coder/medical-data-integration-demo)
+
+---
+
 ## 📋 Overview
 
 This project demonstrates a complete ETL (Extract, Transform, Load) pipeline that transforms messy hospital data into HL7 FHIR R4 compliant resources, using **official German MII (Medizininformatik-Initiative) test data**.
