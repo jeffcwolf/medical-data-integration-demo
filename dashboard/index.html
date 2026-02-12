@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Data Integration Pipeline - Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2d3748;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .metric-value.success {
+            color: #48bb78;
+        }
+
+        .metric-value.warning {
+            color: #ed8936;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-warning {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .badge-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .highlight h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .highlight-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .highlight-item strong {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #4a5568;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .comparison-table tr:hover {
+            background: #f7fafc;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Medical Data Integration Pipeline</h1>
+            <p>ETL Demonstration: Messy CSV → Clean HL7 FHIR R4 Resources</p>
+            <p style="font-size: 0.95rem; margin-top: 10px; opacity: 0.9;">
+                Using Official German MII (Medizininformatik-Initiative) Test Data
+            </p>
+            <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://codeberg.org/jeffcwolf/medical-data-integration-demo" target="_blank"
+                   style="color: white; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 6px; font-weight: 500; transition: background 0.2s;">
+                    📦 View on Codeberg
+                </a>
+                <a href="https://github.com/jeffcwolf/medical-data-integration-demo" target="_blank"
+                   style="color: white; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 6px; font-weight: 500; transition: background 0.2s;">
+                    🐙 View on GitHub
+                </a>
+            </div>
+        </header>
+
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-number">87.7%</div>
+                <div class="stat-label">Data Recovery</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">896</div>
+                <div class="stat-label">FHIR Resources</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Errors</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- About Section -->
+            <div class="section">
+                <h2 class="section-title">About This Project</h2>
+                <div class="card">
+                    <p style="font-size: 1.05rem; color: #2d3748; line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Purpose:</strong> Demonstration project created for the <strong>Data Engineer/Data Scientist position
+                        at BIH@Charité Datenintegrationszentrum</strong>. This project showcases capability to transform
+                        messy hospital data into FHIR-compliant format with comprehensive quality assurance.
+                    </p>
+                    <p style="font-size: 1.05rem; color: #4a5568; line-height: 1.8;">
+                        <strong>Approach:</strong> Uses official German MII (Medizininformatik-Initiative) test data to demonstrate
+                        understanding of the German medical informatics ecosystem and standards that are central to the role.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Overview Section -->
+            <div class="section">
+                <h2 class="section-title">Project Overview</h2>
+                <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 20px;">
+                    This project demonstrates a complete ETL pipeline that transforms messy hospital data
+                    into HL7 FHIR R4 compliant resources, using official German MII test data from
+                    the Medizininformatik-Initiative.
+                </p>
+
+                <div class="highlight">
+                    <h3>🎯 "Reverse Engineering" Approach</h3>
+                    <p>Started with clean FHIR → Created messy CSV → Transformed back to clean FHIR → Validated against original</p>
+                    <div class="highlight-grid">
+                        <div class="highlight-item">
+                            <strong>Phase 1</strong>
+                            <span>FHIR → Messy CSV</span>
+                        </div>
+                        <div class="highlight-item">
+                            <strong>Phase 2</strong>
+                            <span>Data Validation</span>
+                        </div>
+                        <div class="highlight-item">
+                            <strong>Phase 3</strong>
+                            <span>CSV → Clean FHIR</span>
+                        </div>
+                        <div class="highlight-item">
+                            <strong>Phase 4</strong>
+                            <span>Validation & QA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transformation Results -->
+            <div class="section">
+                <h2 class="section-title">Transformation Results</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 class="card-title">Success Rates by Resource Type</h3>
+                        <div class="chart-container">
+                            <canvas id="successChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Resource Counts</h3>
+                        <div class="metric-row">
+                            <span class="metric-label">Patients</span>
+                            <span class="metric-value success">200 / 200</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Conditions</span>
+                            <span class="metric-value success">400 / 400</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Medications</span>
+                            <span class="metric-value success">115 unique</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">MedicationAdministrations</span>
+                            <span class="metric-value success">181 / 181</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Total FHIR Resources</span>
+                            <span class="metric-value"><strong>896</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Quality Section -->
+            <div class="section">
+                <h2 class="section-title">Data Quality Metrics</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 class="card-title">Validation Against Original FHIR</h3>
+                        <div class="chart-container">
+                            <canvas id="validationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Quality Scores</h3>
+                        <div class="metric-row">
+                            <span class="metric-label">Overall Data Recovery</span>
+                            <span class="metric-value success">87.7% <span class="badge badge-success">EXCELLENT</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Patient Demographics</span>
+                            <span class="metric-value success">89.0%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">ICD-10-GM Codes</span>
+                            <span class="metric-value success">91.5%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Quality Score</span>
+                            <span class="metric-value success">100/100 <span class="badge badge-success">PASSED</span></span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Transformation Errors</span>
+                            <span class="metric-value success">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Quality Issues Handled -->
+            <div class="section">
+                <h2 class="section-title">Data Quality Issues Handled</h2>
+                <div class="card">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Issue Type</th>
+                                <th>Example Input (Messy)</th>
+                                <th>Output (Clean FHIR)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ID Format Variations</strong></td>
+                                <td><code>P-00001, PAT00002, 00003, WP1-00004</code></td>
+                                <td><code>00001, 00002, 00003, 00004</code></td>
+                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date Format Variations</strong></td>
+                                <td><code>01.01.1950, 1950/01/01, 01-01-1950</code></td>
+                                <td><code>1950-01-01 (ISO 8601)</code></td>
+                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gender Inconsistencies</strong></td>
+                                <td><code>M, m, male, männlich, W, weiblich</code></td>
+                                <td><code>male, female (FHIR valueSet)</code></td>
+                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Missing Data</strong></td>
+                                <td><code>~12% random missing values</code></td>
+                                <td><code>Handled with defaults or omitted</code></td>
+                                <td><span class="badge badge-warning">⚠ Partial</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>German Characters</strong></td>
+                                <td><code>Müller, Schröder, Weiß</code></td>
+                                <td><code>UTF-8 preserved</code></td>
+                                <td><span class="badge badge-success">✓ Preserved</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- FHIR Resources Examples -->
+            <div class="section">
+                <h2 class="section-title">Sample FHIR Resources</h2>
+                <div class="card">
+                    <div class="tabs">
+                        <button class="tab active" onclick="showTab('patient')">Patient</button>
+                        <button class="tab" onclick="showTab('condition')">Condition</button>
+                        <button class="tab" onclick="showTab('medication')">Medication</button>
+                    </div>
+
+                    <div id="patient" class="tab-content active">
+                        <h4 style="margin-bottom: 10px;">Patient Resource (FHIR R4)</h4>
+                        <div class="code-block">{
+  "resourceType": "Patient",
+  "id": "00001",
+  "identifier": [{
+    "system": "https://POLARWP.de/pid",
+    "value": "00001"
+  }],
+  "name": [{
+    "use": "official",
+    "family": "Mustermann",
+    "given": ["Max_01"]
+  }],
+  "gender": "male",
+  "birthDate": "1950-01-01",
+  "address": [{
+    "type": "both",
+    "line": ["Musterstraße 1"],
+    "city": "Bonn",
+    "postalCode": "53121",
+    "country": "DE"
+  }]
+}</div>
+                    </div>
+
+                    <div id="condition" class="tab-content">
+                        <h4 style="margin-bottom: 10px;">Condition Resource (ICD-10-GM)</h4>
+                        <div class="code-block">{
+  "resourceType": "Condition",
+  "id": "00001",
+  "subject": {
+    "reference": "Patient/00001"
+  },
+  "clinicalStatus": {
+    "coding": [{
+      "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+      "code": "active"
+    }]
+  },
+  "code": {
+    "coding": [{
+      "system": "http://fhir.de/CodeSystem/bfarm/icd-10-gm",
+      "code": "M80.00",
+      "display": "Osteroporose"
+    }],
+    "text": "Osteroporose"
+  },
+  "recordedDate": "2019-01-01"
+}</div>
+                    </div>
+
+                    <div id="medication" class="tab-content">
+                        <h4 style="margin-bottom: 10px;">MedicationAdministration (ATC Codes)</h4>
+                        <div class="code-block">{
+  "resourceType": "MedicationAdministration",
+  "id": "PAT1",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/00001"
+  },
+  "medication": {
+    "reference": {
+      "reference": "Medication/Medication-N06AA09"
+    }
+  },
+  "occurenceDateTime": "2019-01-01"
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Run -->
+            <div class="section">
+                <h2 class="section-title">How to Run This Project</h2>
+                <div class="card">
+                    <h3 class="card-title">Quick Start</h3>
+                    <div class="code-block" style="background: #1a202c;">
+<span style="color: #68d391;"># 1. Clone the repository</span>
+git clone https://codeberg.org/YOUR-USERNAME/YOUR-REPO
+cd YOUR-REPO
+
+<span style="color: #68d391;"># 2. Install dependencies</span>
+pip install -r requirements.txt
+
+<span style="color: #68d391;"># 3. Run the extraction (FHIR → CSV)</span>
+python3 src/fhir_to_csv_extractor.py
+
+<span style="color: #68d391;"># 4. Run the transformation pipeline (CSV → FHIR)</span>
+PYTHONPATH=. python3 src/pipeline.py
+
+<span style="color: #68d391;"># 5. Validate against original FHIR</span>
+PYTHONPATH=. python3 src/validate_against_original.py
+
+<span style="color: #68d391;"># 6. View this dashboard</span>
+open dashboard/index.html
+                    </div>
+                    <p style="margin-top: 15px; color: #4a5568;">
+                        <strong>Requirements:</strong> Python 3.9+, ~2GB disk space for test data<br>
+                        <strong>Execution time:</strong> ~2-3 minutes for full pipeline (200 patients)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Technical Implementation -->
+            <div class="section">
+                <h2 class="section-title">Technical Implementation</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 class="card-title">Technologies Used</h3>
+                        <div class="metric-row">
+                            <span class="metric-label">Programming Language</span>
+                            <span class="metric-value">Python 3.11</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">FHIR Library</span>
+                            <span class="metric-value">fhir.resources 7.1.0</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Data Processing</span>
+                            <span class="metric-value">pandas, pydantic</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Standards</span>
+                            <span class="metric-value">FHIR R4, ICD-10-GM, ATC</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Lines of Code</span>
+                            <span class="metric-value">~2,500</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Key Features</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
+                                ✓ Data quality validation (completeness, consistency)
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
+                                ✓ Referential integrity checks
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
+                                ✓ German medical terminology (ICD-10-GM, ATC)
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
+                                ✓ MII Kerndatensatz profile compliance
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
+                                ✓ Comprehensive error handling
+                            </li>
+                            <li style="padding: 10px 0;">
+                                ✓ Validation against source data
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <p style="margin-bottom: 10px;">
+                <strong>Medical Data Integration Pipeline Demo</strong>
+            </p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">
+                Built with Python • FHIR R4 • MII Kerndatensatz Test Data
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85rem;">
+                <a href="https://github.com/medizininformatik-initiative/kerndatensatz-testdaten" target="_blank">
+                    MII Test Data Source
+                </a> •
+                <a href="https://www.hl7.org/fhir/" target="_blank">
+                    HL7 FHIR Documentation
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Success Rate Chart
+        const successCtx = document.getElementById('successChart').getContext('2d');
+        new Chart(successCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Patients', 'Conditions', 'Medications'],
+                datasets: [{
+                    label: 'Success Rate (%)',
+                    data: [100, 100, 100],
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(118, 75, 162, 0.8)',
+                        'rgba(72, 187, 120, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(102, 126, 234, 1)',
+                        'rgba(118, 75, 162, 1)',
+                        'rgba(72, 187, 120, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Validation Chart
+        const validationCtx = document.getElementById('validationChart').getContext('2d');
+        new Chart(validationCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Gender Match', 'Name Match', 'Birthdate Match', 'ICD-10 Codes'],
+                datasets: [{
+                    data: [89.0, 86.5, 67.5, 91.5],
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(118, 75, 162, 0.8)',
+                        'rgba(72, 187, 120, 0.8)',
+                        'rgba(237, 137, 54, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

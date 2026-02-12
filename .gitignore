@@ -42,10 +42,9 @@ data/processed/
 *.csv
 !data/sample/  # Exception: keep small sample files if you create them
 
-# Outputs and reports
-outputs/
-*.html
-*.pdf
+# Generated reports (not the dashboard)
+outputs/quality_report.html
+outputs/*.pdf
 
 # IDE and Editor files
 .vscode/
