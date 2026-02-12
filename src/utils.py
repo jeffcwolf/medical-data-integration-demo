@@ -34,7 +34,7 @@ def clean_patient_id(id_value: str) -> str:
         return ""
 
     # Extract numeric portion
-    numbers = re.findall(r'\d+', id_value)
+    numbers = re.findall(r"\d+", id_value)
     if numbers:
         # Get the last number (typically the patient sequence)
         number = numbers[-1]
@@ -65,22 +65,22 @@ def normalize_date(date_value: str) -> Optional[str]:
         return None
 
     # Remove timezone info if present (e.g., "2019-01-01T00:00:00+01:00")
-    date_value = date_value.split('T')[0]
+    date_value = date_value.split("T")[0]
 
     # Try different formats
     formats = [
-        ('%Y-%m-%d', r'^\d{4}-\d{2}-\d{2}$'),          # ISO: 2019-01-01
-        ('%d.%m.%Y', r'^\d{2}\.\d{2}\.\d{4}$'),        # German: 01.01.2019
-        ('%Y/%m/%d', r'^\d{4}/\d{2}/\d{2}$'),          # Slash: 2019/01/01
-        ('%d-%m-%Y', r'^\d{2}-\d{2}-\d{4}$'),          # Reverse: 01-01-2019
-        ('%d/%m/%Y', r'^\d{2}/\d{2}/\d{4}$'),          # German slash: 01/01/2019
+        ("%Y-%m-%d", r"^\d{4}-\d{2}-\d{2}$"),  # ISO: 2019-01-01
+        ("%d.%m.%Y", r"^\d{2}\.\d{2}\.\d{4}$"),  # German: 01.01.2019
+        ("%Y/%m/%d", r"^\d{4}/\d{2}/\d{2}$"),  # Slash: 2019/01/01
+        ("%d-%m-%Y", r"^\d{2}-\d{2}-\d{4}$"),  # Reverse: 01-01-2019
+        ("%d/%m/%Y", r"^\d{2}/\d{2}/\d{4}$"),  # German slash: 01/01/2019
     ]
 
     for date_format, pattern in formats:
         if re.match(pattern, date_value):
             try:
                 dt = datetime.strptime(date_value, date_format)
-                return dt.strftime('%Y-%m-%d')
+                return dt.strftime("%Y-%m-%d")
             except ValueError:
                 continue
 
@@ -107,17 +107,17 @@ def normalize_gender(gender_value: str) -> str:
     gender_lower = gender_value.lower().strip()
 
     # Male variations
-    male_values = ['m', 'male', 'männlich', 'mann', 'man']
+    male_values = ["m", "male", "männlich", "mann", "man"]
     if gender_lower in male_values:
         return "male"
 
     # Female variations
-    female_values = ['f', 'w', 'female', 'weiblich', 'frau', 'woman', 'fe']
+    female_values = ["f", "w", "female", "weiblich", "frau", "woman", "fe"]
     if gender_lower in female_values:
         return "female"
 
     # Other/diverse
-    other_values = ['d', 'divers', 'diverse', 'other', 'x']
+    other_values = ["d", "divers", "diverse", "other", "x"]
     if gender_lower in other_values:
         return "other"
 
@@ -139,22 +139,22 @@ def normalize_code_system(system_value: str) -> str:
         return ""
 
     # Common variations
-    if 'icd-10-gm' in system_value.lower():
+    if "icd-10-gm" in system_value.lower():
         return "http://fhir.de/CodeSystem/bfarm/icd-10-gm"
 
-    if 'atc' in system_value.lower():
+    if "atc" in system_value.lower():
         return "http://fhir.de/CodeSystem/bfarm/atc"
 
-    if 'loinc' in system_value.lower():
+    if "loinc" in system_value.lower():
         return "http://loinc.org"
 
     # Return as-is if no match
     return system_value
 
 
-def validate_date_range(date_str: Optional[str],
-                        min_year: int = 1900,
-                        max_year: int = 2030) -> bool:
+def validate_date_range(
+    date_str: Optional[str], min_year: int = 1900, max_year: int = 2030
+) -> bool:
     """
     Check if date is within reasonable range.
 
@@ -170,7 +170,7 @@ def validate_date_range(date_str: Optional[str],
         return False
 
     try:
-        dt = datetime.strptime(date_str, '%Y-%m-%d')
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
         return min_year <= dt.year <= max_year
     except ValueError:
         return False
@@ -210,7 +210,7 @@ def is_valid_icd10_code(code: str) -> bool:
         return False
 
     # Basic pattern: Letter, 2-3 digits, optional dot and more chars
-    pattern = r'^[A-Z]\d{2}\.?\d*[A-Z]?$'
+    pattern = r"^[A-Z]\d{2}\.?\d*[A-Z]?$"
     return bool(re.match(pattern, code.upper()))
 
 
@@ -231,7 +231,7 @@ def is_valid_atc_code(code: str) -> bool:
         return False
 
     # ATC pattern: 1 letter, 2 digits, 2 letters, 2 digits
-    pattern = r'^[A-Z]\d{2}[A-Z]{2}\d{2}$'
+    pattern = r"^[A-Z]\d{2}[A-Z]{2}\d{2}$"
     return bool(re.match(pattern, code.upper()))
 
 
@@ -246,15 +246,12 @@ def format_fhir_identifier(system: str, value: str) -> dict:
     Returns:
         Dict representing FHIR Identifier
     """
-    return {
-        "system": system,
-        "value": value
-    }
+    return {"system": system, "value": value}
 
 
-def format_fhir_codeable_concept(system: str,
-                                  code: str,
-                                  display: Optional[str] = None) -> dict:
+def format_fhir_codeable_concept(
+    system: str, code: str, display: Optional[str] = None
+) -> dict:
     """
     Create FHIR CodeableConcept object.
 
@@ -266,17 +263,12 @@ def format_fhir_codeable_concept(system: str,
     Returns:
         Dict representing FHIR CodeableConcept
     """
-    coding = {
-        "system": system,
-        "code": code
-    }
+    coding = {"system": system, "code": code}
 
     if display:
         coding["display"] = display
 
-    result = {
-        "coding": [coding]
-    }
+    result = {"coding": [coding]}
 
     if display:
         result["text"] = display
@@ -301,8 +293,8 @@ def extract_reference_id(reference: str) -> Optional[str]:
     if not reference:
         return None
 
-    if '/' in reference:
-        return reference.split('/')[-1]
+    if "/" in reference:
+        return reference.split("/")[-1]
 
     return reference
 

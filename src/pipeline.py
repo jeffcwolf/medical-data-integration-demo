@@ -21,7 +21,6 @@ import pandas as pd
 from src.data_validator import DataQualityValidator
 from src.fhir_transformer import FHIRTransformer
 
-
 # Configuration
 DATA_DIR = Path("data")
 RAW_DIR = DATA_DIR / "raw"
@@ -81,27 +80,21 @@ def validate_data(patients_df, conditions_df, medications_df, encounters_df):
 
     # Check referential integrity
     integrity_results = validator.validate_referential_integrity(
-        conditions_df,
-        medications_df,
-        encounters_df,
-        patients_df
+        conditions_df, medications_df, encounters_df, patients_df
     )
 
     # Generate comprehensive report
     report = validator.generate_report(
-        patient_results,
-        condition_results,
-        medication_results,
-        integrity_results
+        patient_results, condition_results, medication_results, integrity_results
     )
 
     # Print summary
-    summary = report['summary']
+    summary = report["summary"]
     print(f"  Quality Score: {summary['quality_score']}/100")
     print(f"  Errors: {summary['total_errors']}")
     print(f"  Warnings: {summary['total_warnings']}")
 
-    if summary['total_errors'] > 0:
+    if summary["total_errors"] > 0:
         print(f"\n  ⚠️  Found {summary['total_errors']} data quality errors")
         print("     (These will be handled during transformation)")
 
@@ -128,15 +121,15 @@ def transform_to_fhir(patients_df, conditions_df, medications_df):
 
     # Transform all data
     fhir_resources = transformer.transform_all(
-        patients_df,
-        conditions_df,
-        medications_df
+        patients_df, conditions_df, medications_df
     )
 
     print(f"  ✓ Created {len(fhir_resources['Patient'])} Patient resources")
     print(f"  ✓ Created {len(fhir_resources['Condition'])} Condition resources")
     print(f"  ✓ Created {len(fhir_resources['Medication'])} Medication resources")
-    print(f"  ✓ Created {len(fhir_resources['MedicationAdministration'])} MedicationAdministration resources")
+    print(
+        f"  ✓ Created {len(fhir_resources['MedicationAdministration'])} MedicationAdministration resources"
+    )
     print()
 
     return fhir_resources, transformer
@@ -157,7 +150,7 @@ def save_fhir_resources(fhir_resources, transformer):
 
     # Save bundle as JSON
     bundle_path = PROCESSED_DIR / "fhir_bundle.json"
-    with open(bundle_path, 'w', encoding='utf-8') as f:
+    with open(bundle_path, "w", encoding="utf-8") as f:
         f.write(bundle.json(indent=2))
 
     print(f"  ✓ Saved FHIR Bundle: {bundle_path}")
@@ -171,10 +164,12 @@ def save_fhir_resources(fhir_resources, transformer):
 
             for resource in resources[:10]:  # Save first 10 as examples
                 resource_path = type_dir / f"{resource.id}.json"
-                with open(resource_path, 'w', encoding='utf-8') as f:
+                with open(resource_path, "w", encoding="utf-8") as f:
                     f.write(resource.json(indent=2))
 
-            print(f"  ✓ Saved {min(10, len(resources))} example {resource_type} resources to {type_dir}/")
+            print(
+                f"  ✓ Saved {min(10, len(resources))} example {resource_type} resources to {type_dir}/"
+            )
 
     print()
 
@@ -190,22 +185,22 @@ def save_quality_report(validation_report, transformation_stats):
     print("Step 5: Generating quality report...")
 
     report = {
-        'timestamp': datetime.now().isoformat(),
-        'pipeline_version': '1.0.0',
-        'data_quality': validation_report,
-        'transformation': transformation_stats
+        "timestamp": datetime.now().isoformat(),
+        "pipeline_version": "1.0.0",
+        "data_quality": validation_report,
+        "transformation": transformation_stats,
     }
 
     # Save as JSON
     report_path = OUTPUTS_DIR / "quality_report.json"
-    with open(report_path, 'w', encoding='utf-8') as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
     print(f"  ✓ Saved quality report: {report_path}")
 
     # Save human-readable summary
     summary_path = OUTPUTS_DIR / "pipeline_summary.txt"
-    with open(summary_path, 'w', encoding='utf-8') as f:
+    with open(summary_path, "w", encoding="utf-8") as f:
         f.write("=" * 70 + "\n")
         f.write("Medical Data Integration Pipeline - Execution Summary\n")
         f.write("=" * 70 + "\n\n")
@@ -215,7 +210,7 @@ def save_quality_report(validation_report, transformation_stats):
         # Data Quality Summary
         f.write("DATA QUALITY SUMMARY\n")
         f.write("-" * 70 + "\n")
-        summary = validation_report['summary']
+        summary = validation_report["summary"]
         f.write(f"Total Patients:    {summary['total_patients']}\n")
         f.write(f"Total Conditions:  {summary['total_conditions']}\n")
         f.write(f"Total Medications: {summary['total_medications']}\n")
@@ -226,20 +221,26 @@ def save_quality_report(validation_report, transformation_stats):
         # Transformation Summary
         f.write("TRANSFORMATION SUMMARY\n")
         f.write("-" * 70 + "\n")
-        f.write(f"Patients Transformed:  {transformation_stats['patients_successful']}/{transformation_stats['patients_processed']} ")
-        if 'patient_success_rate' in transformation_stats:
+        f.write(
+            f"Patients Transformed:  {transformation_stats['patients_successful']}/{transformation_stats['patients_processed']} "
+        )
+        if "patient_success_rate" in transformation_stats:
             f.write(f"({transformation_stats['patient_success_rate']}%)\n")
         else:
             f.write("\n")
 
-        f.write(f"Conditions Transformed: {transformation_stats['conditions_successful']}/{transformation_stats['conditions_processed']} ")
-        if 'condition_success_rate' in transformation_stats:
+        f.write(
+            f"Conditions Transformed: {transformation_stats['conditions_successful']}/{transformation_stats['conditions_processed']} "
+        )
+        if "condition_success_rate" in transformation_stats:
             f.write(f"({transformation_stats['condition_success_rate']}%)\n")
         else:
             f.write("\n")
 
-        f.write(f"Medications Transformed: {transformation_stats['medications_successful']}/{transformation_stats['medications_processed']} ")
-        if 'medication_success_rate' in transformation_stats:
+        f.write(
+            f"Medications Transformed: {transformation_stats['medications_successful']}/{transformation_stats['medications_processed']} "
+        )
+        if "medication_success_rate" in transformation_stats:
             f.write(f"({transformation_stats['medication_success_rate']}%)\n")
         else:
             f.write("\n")
@@ -247,15 +248,15 @@ def save_quality_report(validation_report, transformation_stats):
         f.write(f"\nTransformation Errors: {len(transformation_stats['errors'])}\n")
 
         # Issues
-        if validation_report['all_issues']:
+        if validation_report["all_issues"]:
             f.write("\nDATA QUALITY ISSUES\n")
             f.write("-" * 70 + "\n")
-            for issue in validation_report['all_issues'][:20]:  # First 20
-                severity = issue['severity']
+            for issue in validation_report["all_issues"][:20]:  # First 20
+                severity = issue["severity"]
                 f.write(f"[{severity}] ")
-                if 'field' in issue:
+                if "field" in issue:
                     f.write(f"{issue['field']}: ")
-                elif 'table' in issue:
+                elif "table" in issue:
                     f.write(f"{issue['table']}: ")
                 f.write(f"{issue['message']}\n")
 
@@ -279,17 +280,12 @@ def main():
 
         # Step 2: Validate data quality
         validation_report = validate_data(
-            patients_df,
-            conditions_df,
-            medications_df,
-            encounters_df
+            patients_df, conditions_df, medications_df, encounters_df
         )
 
         # Step 3: Transform to FHIR
         fhir_resources, transformer = transform_to_fhir(
-            patients_df,
-            conditions_df,
-            medications_df
+            patients_df, conditions_df, medications_df
         )
 
         # Step 4: Save FHIR resources
@@ -317,6 +313,7 @@ def main():
         print("=" * 70)
         print(f"Error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         return 1
 

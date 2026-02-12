@@ -19,7 +19,6 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import pandas as pd
 
-
 # Configuration
 FHIR_DATA_DIR = Path("data/POLAR_WP_1.1_v2-POLAR_WP1.1_00001-POLAR_WP1.1_01650.json")
 OUTPUT_DIR = Path("data/raw")
@@ -45,7 +44,7 @@ def load_fhir_bundle(filepath: Path) -> Dict:
     Returns:
         Dict containing the FHIR bundle
     """
-    with open(filepath, 'r', encoding='utf-8') as f:
+    with open(filepath, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -59,9 +58,9 @@ def extract_patient(bundle: Dict) -> Optional[Dict]:
     Returns:
         Patient resource dict or None if not found
     """
-    for entry in bundle.get('entry', []):
-        resource = entry.get('resource', {})
-        if resource.get('resourceType') == 'Patient':
+    for entry in bundle.get("entry", []):
+        resource = entry.get("resource", {})
+        if resource.get("resourceType") == "Patient":
             return resource
     return None
 
@@ -78,13 +77,10 @@ def extract_conditions(bundle: Dict, patient_id: str) -> List[Dict]:
         List of Condition resource dicts
     """
     conditions = []
-    for entry in bundle.get('entry', []):
-        resource = entry.get('resource', {})
-        if resource.get('resourceType') == 'Condition':
-            conditions.append({
-                'resource': resource,
-                'patient_id': patient_id
-            })
+    for entry in bundle.get("entry", []):
+        resource = entry.get("resource", {})
+        if resource.get("resourceType") == "Condition":
+            conditions.append({"resource": resource, "patient_id": patient_id})
     return conditions
 
 
@@ -103,21 +99,23 @@ def extract_medications(bundle: Dict, patient_id: str) -> List[Dict]:
     administrations = []
 
     # First pass: collect Medication resources
-    for entry in bundle.get('entry', []):
-        resource = entry.get('resource', {})
-        if resource.get('resourceType') == 'Medication':
-            med_id = resource.get('id')
+    for entry in bundle.get("entry", []):
+        resource = entry.get("resource", {})
+        if resource.get("resourceType") == "Medication":
+            med_id = resource.get("id")
             medications[med_id] = resource
 
     # Second pass: collect MedicationAdministration and link to Medication
-    for entry in bundle.get('entry', []):
-        resource = entry.get('resource', {})
-        if resource.get('resourceType') == 'MedicationAdministration':
-            administrations.append({
-                'administration': resource,
-                'patient_id': patient_id,
-                'medications': medications
-            })
+    for entry in bundle.get("entry", []):
+        resource = entry.get("resource", {})
+        if resource.get("resourceType") == "MedicationAdministration":
+            administrations.append(
+                {
+                    "administration": resource,
+                    "patient_id": patient_id,
+                    "medications": medications,
+                }
+            )
 
     return administrations
 
@@ -134,19 +132,17 @@ def extract_encounters(bundle: Dict, patient_id: str) -> List[Dict]:
         List of Encounter resource dicts
     """
     encounters = []
-    for entry in bundle.get('entry', []):
-        resource = entry.get('resource', {})
-        if resource.get('resourceType') == 'Encounter':
-            encounters.append({
-                'resource': resource,
-                'patient_id': patient_id
-            })
+    for entry in bundle.get("entry", []):
+        resource = entry.get("resource", {})
+        if resource.get("resourceType") == "Encounter":
+            encounters.append({"resource": resource, "patient_id": patient_id})
     return encounters
 
 
 # ============================================================================
 # Data "Breaking" Functions - Introduce Realistic Quality Issues
 # ============================================================================
+
 
 def messify_patient_id(original_id: str) -> str:
     """
@@ -165,14 +161,14 @@ def messify_patient_id(original_id: str) -> str:
         return original_id
 
     # Extract the numeric portion
-    number = original_id.split('-')[-1]
+    number = original_id.split("-")[-1]
 
     formats = [
-        lambda x: f"P-{x}",           # P-00001
-        lambda x: f"PAT{x}",          # PAT00001
-        lambda x: x,                   # 00001 (just number)
-        lambda x: f"WP1-{x}",         # WP1-00001
-        lambda x: original_id,         # Keep original (20% of time)
+        lambda x: f"P-{x}",  # P-00001
+        lambda x: f"PAT{x}",  # PAT00001
+        lambda x: x,  # 00001 (just number)
+        lambda x: f"WP1-{x}",  # WP1-00001
+        lambda x: original_id,  # Keep original (20% of time)
     ]
 
     # Weighted choice - keep original 20% of the time
@@ -201,14 +197,14 @@ def messify_date(iso_date: str) -> str:
 
     # Parse ISO date
     try:
-        parts = iso_date.split('T')[0].split('-')  # Handle datetime, get date part
+        parts = iso_date.split("T")[0].split("-")  # Handle datetime, get date part
         year, month, day = parts[0], parts[1], parts[2]
 
         formats = [
-            lambda: f"{day}.{month}.{year}",      # DD.MM.YYYY (German)
-            lambda: f"{year}/{month}/{day}",      # YYYY/MM/DD
-            lambda: f"{day}-{month}-{year}",      # DD-MM-YYYY
-            lambda: iso_date.split('T')[0],       # Keep ISO (YYYY-MM-DD)
+            lambda: f"{day}.{month}.{year}",  # DD.MM.YYYY (German)
+            lambda: f"{year}/{month}/{day}",  # YYYY/MM/DD
+            lambda: f"{day}-{month}-{year}",  # DD-MM-YYYY
+            lambda: iso_date.split("T")[0],  # Keep ISO (YYYY-MM-DD)
         ]
 
         return random.choice(formats)()
@@ -236,9 +232,9 @@ def messify_gender(gender: str) -> str:
         return gender
 
     mappings = {
-        'male': ['M', 'm', 'male', 'männlich', 'Male'],
-        'female': ['F', 'w', 'female', 'weiblich', 'W', 'Female'],
-        'other': ['divers', 'd', 'other', 'Other'],
+        "male": ["M", "m", "male", "männlich", "Male"],
+        "female": ["F", "w", "female", "weiblich", "W", "Female"],
+        "other": ["divers", "d", "other", "Other"],
     }
 
     options = mappings.get(gender, [gender])
@@ -269,6 +265,7 @@ def maybe_missing(value: str, critical: bool = False) -> str:
 # CSV Row Building Functions
 # ============================================================================
 
+
 def patient_to_csv_row(patient: Dict, messy_id: str) -> Dict:
     """
     Convert FHIR Patient resource to CSV row with quality issues.
@@ -281,27 +278,27 @@ def patient_to_csv_row(patient: Dict, messy_id: str) -> Dict:
         Dict representing a CSV row
     """
     # Extract name
-    name_obj = patient.get('name', [{}])[0]
-    family_name = name_obj.get('family', '')
-    given_name = name_obj.get('given', [''])[0]
+    name_obj = patient.get("name", [{}])[0]
+    family_name = name_obj.get("family", "")
+    given_name = name_obj.get("given", [""])[0]
 
     # Extract address
-    address_obj = patient.get('address', [{}])[0]
-    street = address_obj.get('line', [''])[0] if address_obj.get('line') else ''
-    city = address_obj.get('city', '')
-    postal_code = address_obj.get('postalCode', '')
-    country = address_obj.get('country', '')
+    address_obj = patient.get("address", [{}])[0]
+    street = address_obj.get("line", [""])[0] if address_obj.get("line") else ""
+    city = address_obj.get("city", "")
+    postal_code = address_obj.get("postalCode", "")
+    country = address_obj.get("country", "")
 
     return {
-        'PatientID': messy_id,  # Critical - always present
-        'FirstName': maybe_missing(given_name),
-        'LastName': maybe_missing(family_name),
-        'Birthdate': messify_date(patient.get('birthDate', '')),
-        'Gender': messify_gender(patient.get('gender', '')),
-        'Street': maybe_missing(street),
-        'City': maybe_missing(city),
-        'PostalCode': maybe_missing(postal_code),
-        'Country': maybe_missing(country),
+        "PatientID": messy_id,  # Critical - always present
+        "FirstName": maybe_missing(given_name),
+        "LastName": maybe_missing(family_name),
+        "Birthdate": messify_date(patient.get("birthDate", "")),
+        "Gender": messify_gender(patient.get("gender", "")),
+        "Street": maybe_missing(street),
+        "City": maybe_missing(city),
+        "PostalCode": maybe_missing(postal_code),
+        "Country": maybe_missing(country),
     }
 
 
@@ -316,26 +313,26 @@ def condition_to_csv_row(condition_data: Dict, messy_patient_id: str) -> Dict:
     Returns:
         Dict representing a CSV row
     """
-    condition = condition_data['resource']
-    condition_id = condition.get('id', '')
+    condition = condition_data["resource"]
+    condition_id = condition.get("id", "")
 
     # Extract ICD-10-GM code
-    code_obj = condition.get('code', {})
-    coding = code_obj.get('coding', [{}])[0]
-    code = coding.get('code', '')
-    system = coding.get('system', '')
-    display = code_obj.get('text', '')
+    code_obj = condition.get("code", {})
+    coding = code_obj.get("coding", [{}])[0]
+    code = coding.get("code", "")
+    system = coding.get("system", "")
+    display = code_obj.get("text", "")
 
     # Messify the condition ID similarly
     messy_condition_id = messify_patient_id(condition_id)
 
     return {
-        'ConditionID': messy_condition_id,  # Critical - always present
-        'PatientID': messy_patient_id,      # Critical - always present
-        'Code': maybe_missing(code),
-        'CodeSystem': maybe_missing(system),
-        'Display': maybe_missing(display),
-        'RecordedDate': messify_date(condition.get('recordedDate', '')),
+        "ConditionID": messy_condition_id,  # Critical - always present
+        "PatientID": messy_patient_id,  # Critical - always present
+        "Code": maybe_missing(code),
+        "CodeSystem": maybe_missing(system),
+        "Display": maybe_missing(display),
+        "RecordedDate": messify_date(condition.get("recordedDate", "")),
     }
 
 
@@ -350,46 +347,46 @@ def medication_to_csv_row(med_data: Dict, messy_patient_id: str) -> Dict:
     Returns:
         Dict representing a CSV row
     """
-    administration = med_data['administration']
-    medications = med_data['medications']
+    administration = med_data["administration"]
+    medications = med_data["medications"]
 
     # Get medication reference
-    med_ref = administration.get('medicationReference', {}).get('reference', '')
-    med_id = med_ref.split('/')[-1] if '/' in med_ref else med_ref
+    med_ref = administration.get("medicationReference", {}).get("reference", "")
+    med_id = med_ref.split("/")[-1] if "/" in med_ref else med_ref
 
     # Look up medication details
     medication = medications.get(med_id, {})
 
     # Extract medication code and name
-    code_obj = medication.get('code', {})
-    coding = code_obj.get('coding', [{}])[0]
-    med_code = coding.get('code', '')
-    med_name = code_obj.get('text', '')
+    code_obj = medication.get("code", {})
+    coding = code_obj.get("coding", [{}])[0]
+    med_code = coding.get("code", "")
+    med_name = code_obj.get("text", "")
 
     # Extract dosage
-    dosage = administration.get('dosage', {})
-    dose = dosage.get('dose', {})
-    dose_value = dose.get('value', '')
-    dose_unit = dose.get('unit', '')
+    dosage = administration.get("dosage", {})
+    dose = dosage.get("dose", {})
+    dose_value = dose.get("value", "")
+    dose_unit = dose.get("unit", "")
 
     # Status
-    status = administration.get('status', '')
+    status = administration.get("status", "")
 
     # Effective date
-    effective_date = administration.get('effectiveDateTime', '')
+    effective_date = administration.get("effectiveDateTime", "")
 
     # Messify medication ID
-    messy_med_id = messify_patient_id(administration.get('id', ''))
+    messy_med_id = messify_patient_id(administration.get("id", ""))
 
     return {
-        'MedicationID': messy_med_id,          # Critical - always present
-        'PatientID': messy_patient_id,         # Critical - always present
-        'MedicationCode': maybe_missing(med_code),
-        'MedicationName': maybe_missing(med_name),
-        'DoseValue': maybe_missing(str(dose_value)),
-        'DoseUnit': maybe_missing(dose_unit),
-        'Status': maybe_missing(status),
-        'EffectiveDate': messify_date(effective_date),
+        "MedicationID": messy_med_id,  # Critical - always present
+        "PatientID": messy_patient_id,  # Critical - always present
+        "MedicationCode": maybe_missing(med_code),
+        "MedicationName": maybe_missing(med_name),
+        "DoseValue": maybe_missing(str(dose_value)),
+        "DoseUnit": maybe_missing(dose_unit),
+        "Status": maybe_missing(status),
+        "EffectiveDate": messify_date(effective_date),
     }
 
 
@@ -404,40 +401,41 @@ def encounter_to_csv_row(encounter_data: Dict, messy_patient_id: str) -> Dict:
     Returns:
         Dict representing a CSV row
     """
-    encounter = encounter_data['resource']
-    encounter_id = encounter.get('id', '')
+    encounter = encounter_data["resource"]
+    encounter_id = encounter.get("id", "")
 
     # Extract encounter details
-    encounter_class = encounter.get('class', {}).get('code', '')
-    status = encounter.get('status', '')
+    encounter_class = encounter.get("class", {}).get("code", "")
+    status = encounter.get("status", "")
 
     # Extract period
-    period = encounter.get('period', {})
-    start_date = period.get('start', '')
-    end_date = period.get('end', '')
+    period = encounter.get("period", {})
+    start_date = period.get("start", "")
+    end_date = period.get("end", "")
 
     # Extract department (serviceType)
-    service_type = encounter.get('serviceType', {})
-    dept_coding = service_type.get('coding', [{}])[0]
-    department = dept_coding.get('display', '')
+    service_type = encounter.get("serviceType", {})
+    dept_coding = service_type.get("coding", [{}])[0]
+    department = dept_coding.get("display", "")
 
     # Messify encounter ID
     messy_encounter_id = messify_patient_id(encounter_id)
 
     return {
-        'EncounterID': messy_encounter_id,     # Critical - always present
-        'PatientID': messy_patient_id,         # Critical - always present
-        'Class': maybe_missing(encounter_class),
-        'Status': maybe_missing(status),
-        'StartDate': messify_date(start_date),
-        'EndDate': messify_date(end_date),
-        'Department': maybe_missing(department),
+        "EncounterID": messy_encounter_id,  # Critical - always present
+        "PatientID": messy_patient_id,  # Critical - always present
+        "Class": maybe_missing(encounter_class),
+        "Status": maybe_missing(status),
+        "StartDate": messify_date(start_date),
+        "EndDate": messify_date(end_date),
+        "Department": maybe_missing(department),
     }
 
 
 # ============================================================================
 # Main Extraction Logic
 # ============================================================================
+
 
 def main():
     """
@@ -464,7 +462,7 @@ def main():
     encounters_data = []
 
     # Get list of FHIR bundle files
-    bundle_files = sorted(FHIR_DATA_DIR.glob('*.json'))[:NUM_PATIENTS]
+    bundle_files = sorted(FHIR_DATA_DIR.glob("*.json"))[:NUM_PATIENTS]
 
     print(f"Found {len(bundle_files)} FHIR bundle files")
     print()
@@ -482,7 +480,7 @@ def main():
             continue
 
         # Get original patient ID and messify it
-        original_patient_id = patient.get('id', '')
+        original_patient_id = patient.get("id", "")
         messy_patient_id = messify_patient_id(original_patient_id)
 
         # Convert patient to CSV row
@@ -498,9 +496,7 @@ def main():
         # Extract and convert medications
         medications = extract_medications(bundle, original_patient_id)
         for med_data in medications:
-            medications_data.append(
-                medication_to_csv_row(med_data, messy_patient_id)
-            )
+            medications_data.append(medication_to_csv_row(med_data, messy_patient_id))
 
         # Extract and convert encounters
         encounters = extract_encounters(bundle, original_patient_id)
@@ -523,10 +519,10 @@ def main():
     df_medications = pd.DataFrame(medications_data)
     df_encounters = pd.DataFrame(encounters_data)
 
-    df_patients.to_csv(OUTPUT_DIR / 'patients.csv', index=False)
-    df_conditions.to_csv(OUTPUT_DIR / 'conditions.csv', index=False)
-    df_medications.to_csv(OUTPUT_DIR / 'medications.csv', index=False)
-    df_encounters.to_csv(OUTPUT_DIR / 'encounters.csv', index=False)
+    df_patients.to_csv(OUTPUT_DIR / "patients.csv", index=False)
+    df_conditions.to_csv(OUTPUT_DIR / "conditions.csv", index=False)
+    df_medications.to_csv(OUTPUT_DIR / "medications.csv", index=False)
+    df_encounters.to_csv(OUTPUT_DIR / "encounters.csv", index=False)
 
     # Print summary statistics
     print("✅ Data extracted successfully!")
@@ -547,14 +543,14 @@ def main():
 
     # Calculate missing data percentages
     for name, df in [
-        ('patients.csv', df_patients),
-        ('conditions.csv', df_conditions),
-        ('medications.csv', df_medications),
-        ('encounters.csv', df_encounters)
+        ("patients.csv", df_patients),
+        ("conditions.csv", df_conditions),
+        ("medications.csv", df_medications),
+        ("encounters.csv", df_encounters),
     ]:
         print(f"\n{name}:")
         for col in df.columns:
-            missing_pct = (df[col] == '').sum() / len(df) * 100
+            missing_pct = (df[col] == "").sum() / len(df) * 100
             if missing_pct > 0:
                 print(f"  {col}: {missing_pct:.1f}% missing")
 
