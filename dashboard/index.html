@@ -301,6 +301,227 @@
             background: #f7fafc;
         }
 
+        /* Transformation Viewer */
+        .viewer-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .viewer-btn {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            color: #4a5568;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .viewer-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .viewer-btn.active {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .viewer-panel {
+            display: none;
+        }
+
+        .viewer-panel.active {
+            display: block;
+        }
+
+        .transform-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: start;
+            margin-bottom: 24px;
+        }
+
+        .transform-side {
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .transform-side-header {
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .transform-side.messy .transform-side-header {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        .transform-side.clean .transform-side-header {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .transform-side-body {
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            background: #f7fafc;
+        }
+
+        .field-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .field-name {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .field-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .field-value.changed {
+            color: #22543d;
+            background: #c6f6d5;
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .field-value.missing {
+            color: #9b2c2c;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        .transform-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding-top: 40px;
+        }
+
+        .transform-annotations {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #ebf8ff;
+            border-left: 3px solid #4299e1;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85rem;
+            color: #2c5282;
+        }
+
+        .transform-annotations ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .transform-annotations li {
+            padding: 3px 0;
+        }
+
+        .transform-annotations li::before {
+            content: "\2192 ";
+            color: #4299e1;
+            font-weight: bold;
+        }
+
+        /* Expandable Quality Drill-downs */
+        .metric-row.expandable {
+            cursor: pointer;
+            transition: background 0.15s;
+            padding: 12px 8px;
+            margin: 0 -8px;
+            border-radius: 4px;
+        }
+
+        .metric-row.expandable:hover {
+            background: #f7fafc;
+        }
+
+        .metric-row.expandable .metric-label::after {
+            content: " \25BC";
+            font-size: 0.7rem;
+            color: #a0aec0;
+            transition: transform 0.2s;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        .metric-row.expandable.expanded .metric-label::after {
+            transform: rotate(180deg);
+        }
+
+        .drill-down {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            background: #f7fafc;
+            border-radius: 6px;
+            margin: 0 0 8px 0;
+            font-size: 0.88rem;
+        }
+
+        .drill-down.open {
+            max-height: 500px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .drill-down-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .drill-down-stat:last-child {
+            border-bottom: none;
+        }
+
+        .drill-down-label {
+            color: #4a5568;
+        }
+
+        .drill-down-value {
+            font-weight: 600;
+        }
+
+        .drill-down-value.good { color: #38a169; }
+        .drill-down-value.neutral { color: #718096; }
+        .drill-down-value.gap { color: #dd6b20; }
+
+        .drill-down-note {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #fffbeb;
+            border-left: 3px solid #ecc94b;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.82rem;
+            color: #744210;
+        }
+
         @media (max-width: 768px) {
             .grid-2 {
                 grid-template-columns: 1fr;
@@ -312,6 +533,15 @@
 
             .stat-number {
                 font-size: 2rem;
+            }
+
+            .transform-row {
+                grid-template-columns: 1fr;
+            }
+
+            .transform-arrow {
+                padding-top: 0;
+                transform: rotate(90deg);
             }
         }
     </style>
@@ -361,8 +591,7 @@
                 <h2 class="section-title">About This Project</h2>
                 <div class="card">
                     <p style="font-size: 1.05rem; color: #2d3748; line-height: 1.8; margin-bottom: 15px;">
-                        <strong>Purpose:</strong> Demonstration project created for the <strong>Data Engineer/Data Scientist position
-                        at BIH@Charité Datenintegrationszentrum</strong>. This project showcases capability to transform
+                        <strong>Purpose:</strong> This demoonstration project showcases the capability to transform
                         messy hospital data into FHIR-compliant format with comprehensive quality assurance.
                     </p>
                     <p style="font-size: 1.05rem; color: #4a5568; line-height: 1.8;">
@@ -446,7 +675,7 @@
                     <div style="margin-top: 25px; padding: 15px; background: #f7fafc; border-left: 4px solid #4299e1; border-radius: 4px;">
                         <div style="margin-bottom: 8px;">
                             <strong style="color: #2d3748;">Tech Stack:</strong> 
-                            <span style="color: #4a5568;">Python • pandas • fhir.resources (FHIR R4) • pytest • Streamlit</span>
+                            <span style="color: #4a5568;">Python • pandas • fhir.resources (FHIR R4) • pytest • JavaScript/CSS/HTML</span>
                         </div>
                         <div>
                             <strong style="color: #2d3748;">Data Source:</strong> 
@@ -497,6 +726,225 @@
                 </div>
             </div>
 
+            <!-- Transformation Viewer -->
+            <div class="section">
+                <h2 class="section-title">Transformation Viewer</h2>
+                <p style="color: #4a5568; margin-bottom: 20px;">
+                    See exactly how the pipeline transforms messy CSV input into clean FHIR R4 resources.
+                    Each example uses real data from the pipeline.
+                </p>
+                <div class="card">
+                    <div class="viewer-nav">
+                        <button class="viewer-btn active" onclick="showViewer('ex1')">Patient #00001</button>
+                        <button class="viewer-btn" onclick="showViewer('ex2')">Patient #00004</button>
+                        <button class="viewer-btn" onclick="showViewer('ex3')">Patient #00006</button>
+                        <button class="viewer-btn" onclick="showViewer('ex4')">Condition</button>
+                        <button class="viewer-btn" onclick="showViewer('ex5')">Medication</button>
+                    </div>
+
+                    <!-- Example 1: Patient #00001 - ID normalization, date format, missing fields -->
+                    <div id="ex1" class="viewer-panel active">
+                        <div class="transform-row">
+                            <div class="transform-side messy">
+                                <div class="transform-side-header">Messy CSV Input</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">PatientID</span><span class="field-value">WP1-00001</span></div>
+                                    <div class="field-row"><span class="field-name">FirstName</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">LastName</span><span class="field-value">Mustermann</span></div>
+                                    <div class="field-row"><span class="field-name">Birthdate</span><span class="field-value">01.01.1950</span></div>
+                                    <div class="field-row"><span class="field-name">Gender</span><span class="field-value">Male</span></div>
+                                    <div class="field-row"><span class="field-name">Street</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">City</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">PostalCode</span><span class="field-value missing">(empty)</span></div>
+                                </div>
+                            </div>
+                            <div class="transform-arrow">&rarr;</div>
+                            <div class="transform-side clean">
+                                <div class="transform-side-header">Clean FHIR R4 Output</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">id</span><span class="field-value changed">00001</span></div>
+                                    <div class="field-row"><span class="field-name">given</span><span class="field-value missing">(omitted)</span></div>
+                                    <div class="field-row"><span class="field-name">family</span><span class="field-value">Mustermann</span></div>
+                                    <div class="field-row"><span class="field-name">birthDate</span><span class="field-value changed">1950-01-01</span></div>
+                                    <div class="field-row"><span class="field-name">gender</span><span class="field-value changed">male</span></div>
+                                    <div class="field-row"><span class="field-name">line</span><span class="field-value missing">(omitted)</span></div>
+                                    <div class="field-row"><span class="field-name">city</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">postalCode</span><span class="field-value missing">(omitted)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transform-annotations">
+                            <strong>Transformations applied:</strong>
+                            <ul>
+                                <li>ID normalized: <code>WP1-00001</code> &rarr; <code>00001</code> (stripped prefix)</li>
+                                <li>Date converted: <code>01.01.1950</code> (DD.MM.YYYY) &rarr; <code>1950-01-01</code> (ISO 8601)</li>
+                                <li>Gender standardized: <code>Male</code> &rarr; <code>male</code> (FHIR ValueSet)</li>
+                                <li>Missing fields (FirstName, Street, PostalCode) gracefully omitted from FHIR output</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Example 2: Patient #00004 - Different ID format, date format, German gender -->
+                    <div id="ex2" class="viewer-panel">
+                        <div class="transform-row">
+                            <div class="transform-side messy">
+                                <div class="transform-side-header">Messy CSV Input</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">PatientID</span><span class="field-value">00004</span></div>
+                                    <div class="field-row"><span class="field-name">FirstName</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">LastName</span><span class="field-value">Mustermann</span></div>
+                                    <div class="field-row"><span class="field-name">Birthdate</span><span class="field-value">1953/01/01</span></div>
+                                    <div class="field-row"><span class="field-name">Gender</span><span class="field-value">W</span></div>
+                                    <div class="field-row"><span class="field-name">Street</span><span class="field-value">Musterstra&szlig;e 1</span></div>
+                                    <div class="field-row"><span class="field-name">City</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">PostalCode</span><span class="field-value">53121</span></div>
+                                </div>
+                            </div>
+                            <div class="transform-arrow">&rarr;</div>
+                            <div class="transform-side clean">
+                                <div class="transform-side-header">Clean FHIR R4 Output</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">id</span><span class="field-value">00004</span></div>
+                                    <div class="field-row"><span class="field-name">given</span><span class="field-value missing">(omitted)</span></div>
+                                    <div class="field-row"><span class="field-name">family</span><span class="field-value">Mustermann</span></div>
+                                    <div class="field-row"><span class="field-name">birthDate</span><span class="field-value changed">1953-01-01</span></div>
+                                    <div class="field-row"><span class="field-name">gender</span><span class="field-value changed">female</span></div>
+                                    <div class="field-row"><span class="field-name">line</span><span class="field-value">Musterstra&szlig;e 1</span></div>
+                                    <div class="field-row"><span class="field-name">city</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">postalCode</span><span class="field-value">53121</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transform-annotations">
+                            <strong>Transformations applied:</strong>
+                            <ul>
+                                <li>Date converted: <code>1953/01/01</code> (YYYY/MM/DD) &rarr; <code>1953-01-01</code> (ISO 8601)</li>
+                                <li>Gender mapped: <code>W</code> (German abbreviation for <em>weiblich</em>) &rarr; <code>female</code> (FHIR ValueSet)</li>
+                                <li>German character <code>&szlig;</code> preserved correctly in UTF-8 address</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Example 3: Patient #00006 - Maximum missing data -->
+                    <div id="ex3" class="viewer-panel">
+                        <div class="transform-row">
+                            <div class="transform-side messy">
+                                <div class="transform-side-header">Messy CSV Input</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">PatientID</span><span class="field-value">00006</span></div>
+                                    <div class="field-row"><span class="field-name">FirstName</span><span class="field-value">Maxi_03</span></div>
+                                    <div class="field-row"><span class="field-name">LastName</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">Birthdate</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">Gender</span><span class="field-value">weiblich</span></div>
+                                    <div class="field-row"><span class="field-name">Street</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">City</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">PostalCode</span><span class="field-value">53121</span></div>
+                                </div>
+                            </div>
+                            <div class="transform-arrow">&rarr;</div>
+                            <div class="transform-side clean">
+                                <div class="transform-side-header">Clean FHIR R4 Output</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">id</span><span class="field-value">00006</span></div>
+                                    <div class="field-row"><span class="field-name">given</span><span class="field-value">Maxi_03</span></div>
+                                    <div class="field-row"><span class="field-name">family</span><span class="field-value missing">(omitted)</span></div>
+                                    <div class="field-row"><span class="field-name">birthDate</span><span class="field-value missing">(omitted &mdash; no data)</span></div>
+                                    <div class="field-row"><span class="field-name">gender</span><span class="field-value changed">female</span></div>
+                                    <div class="field-row"><span class="field-name">line</span><span class="field-value missing">(omitted)</span></div>
+                                    <div class="field-row"><span class="field-name">city</span><span class="field-value">Bonn</span></div>
+                                    <div class="field-row"><span class="field-name">postalCode</span><span class="field-value">53121</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transform-annotations">
+                            <strong>Transformations applied:</strong>
+                            <ul>
+                                <li>Gender mapped: <code>weiblich</code> (German for <em>female</em>) &rarr; <code>female</code> (FHIR ValueSet)</li>
+                                <li>Missing LastName, Birthdate, Street &mdash; gracefully omitted from FHIR resource</li>
+                                <li>This patient demonstrates maximum missing data handling (4 of 8 fields empty)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Example 4: Condition - ICD-10-GM code handling -->
+                    <div id="ex4" class="viewer-panel">
+                        <div class="transform-row">
+                            <div class="transform-side messy">
+                                <div class="transform-side-header">Messy CSV Input</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">ConditionID</span><span class="field-value">WP1-1</span></div>
+                                    <div class="field-row"><span class="field-name">PatientID</span><span class="field-value">PAT00002</span></div>
+                                    <div class="field-row"><span class="field-name">Code</span><span class="field-value">M80.01</span></div>
+                                    <div class="field-row"><span class="field-name">CodeSystem</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">Display</span><span class="field-value">Osteroporose</span></div>
+                                    <div class="field-row"><span class="field-name">RecordedDate</span><span class="field-value">2019/01/05</span></div>
+                                </div>
+                            </div>
+                            <div class="transform-arrow">&rarr;</div>
+                            <div class="transform-side clean">
+                                <div class="transform-side-header">Clean FHIR R4 Output</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">resourceType</span><span class="field-value">Condition</span></div>
+                                    <div class="field-row"><span class="field-name">code.system</span><span class="field-value changed">icd-10-gm</span></div>
+                                    <div class="field-row"><span class="field-name">code.code</span><span class="field-value">M80.01</span></div>
+                                    <div class="field-row"><span class="field-name">code.display</span><span class="field-value">Osteroporose</span></div>
+                                    <div class="field-row"><span class="field-name">subject</span><span class="field-value changed">Patient/00002</span></div>
+                                    <div class="field-row"><span class="field-name">clinicalStatus</span><span class="field-value changed">active</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transform-annotations">
+                            <strong>Transformations applied:</strong>
+                            <ul>
+                                <li>Missing CodeSystem inferred from ICD-10 code format &rarr; <code>http://fhir.de/CodeSystem/bfarm/icd-10-gm</code></li>
+                                <li>Patient reference normalized: <code>PAT00002</code> &rarr; <code>Patient/00002</code></li>
+                                <li>Clinical status defaulted to <code>active</code> (not present in CSV)</li>
+                                <li>Date converted: <code>2019/01/05</code> &rarr; ISO 8601 format</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Example 5: Medication - ATC code, missing fields -->
+                    <div id="ex5" class="viewer-panel">
+                        <div class="transform-row">
+                            <div class="transform-side messy">
+                                <div class="transform-side-header">Messy CSV Input</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">MedicationID</span><span class="field-value">PAT1</span></div>
+                                    <div class="field-row"><span class="field-name">PatientID</span><span class="field-value">WP1-00001</span></div>
+                                    <div class="field-row"><span class="field-name">MedicationCode</span><span class="field-value">N06AA09</span></div>
+                                    <div class="field-row"><span class="field-name">MedicationName</span><span class="field-value">ATC_AMITRYPTILIN</span></div>
+                                    <div class="field-row"><span class="field-name">DoseValue</span><span class="field-value">1</span></div>
+                                    <div class="field-row"><span class="field-name">DoseUnit</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">Status</span><span class="field-value missing">(empty)</span></div>
+                                    <div class="field-row"><span class="field-name">EffectiveDate</span><span class="field-value">01-01-2019</span></div>
+                                </div>
+                            </div>
+                            <div class="transform-arrow">&rarr;</div>
+                            <div class="transform-side clean">
+                                <div class="transform-side-header">Clean FHIR R4 Output</div>
+                                <div class="transform-side-body">
+                                    <div class="field-row"><span class="field-name">resourceType</span><span class="field-value">MedicationAdministration</span></div>
+                                    <div class="field-row"><span class="field-name">status</span><span class="field-value changed">completed</span></div>
+                                    <div class="field-row"><span class="field-name">medication</span><span class="field-value changed">Medication/Medication-N06AA09</span></div>
+                                    <div class="field-row"><span class="field-name">subject</span><span class="field-value changed">Patient/00001</span></div>
+                                    <div class="field-row"><span class="field-name">occurenceDateTime</span><span class="field-value changed">2019-01-01</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="transform-annotations">
+                            <strong>Transformations applied:</strong>
+                            <ul>
+                                <li>Patient reference normalized: <code>WP1-00001</code> &rarr; <code>Patient/00001</code></li>
+                                <li>ATC code <code>N06AA09</code> linked to Medication resource reference</li>
+                                <li>Missing Status defaulted to <code>completed</code></li>
+                                <li>Date converted: <code>01-01-2019</code> (DD-MM-YYYY) &rarr; <code>2019-01-01</code> (ISO 8601)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Data Quality Section -->
             <div class="section">
                 <h2 class="section-title">Data Quality Metrics</h2>
@@ -508,18 +956,107 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">Quality Scores</h3>
+                        <h3 class="card-title">Quality Scores <span style="font-size: 0.75rem; color: #a0aec0; font-weight: 400;">(click to expand)</span></h3>
+
+                        <div class="metric-row expandable" onclick="toggleDrillDown('dd-gender')">
+                            <span class="metric-label">Gender Match</span>
+                            <span class="metric-value success">89.0% (178/200)</span>
+                        </div>
+                        <div id="dd-gender" class="drill-down">
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Correctly matched</span>
+                                <span class="drill-down-value good">178 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing in source CSV (~11% randomly nulled)</span>
+                                <span class="drill-down-value gap">22 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Input variations handled</span>
+                                <span class="drill-down-value neutral">M, m, Male, male, W, Female, weiblich, m&auml;nnlich</span>
+                            </div>
+                            <div class="drill-down-note">
+                                Gap is entirely due to deliberately introduced missing values (~11% null rate). All present gender values were correctly mapped to the FHIR ValueSet (<code>male</code>/<code>female</code>).
+                            </div>
+                        </div>
+
+                        <div class="metric-row expandable" onclick="toggleDrillDown('dd-name')">
+                            <span class="metric-label">Name Match</span>
+                            <span class="metric-value success">86.5% (173/200)</span>
+                        </div>
+                        <div id="dd-name" class="drill-down">
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Correctly matched</span>
+                                <span class="drill-down-value good">173 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing FirstName in CSV</span>
+                                <span class="drill-down-value gap">23 patients (11.5%)</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing LastName in CSV</span>
+                                <span class="drill-down-value gap">27 patients (13.5%)</span>
+                            </div>
+                            <div class="drill-down-note">
+                                Name mismatches are caused by deliberately nulled fields. When either first or last name is missing from the messy CSV, the reconstructed FHIR name cannot match the original. This is expected and by design.
+                            </div>
+                        </div>
+
+                        <div class="metric-row expandable" onclick="toggleDrillDown('dd-birthdate')">
+                            <span class="metric-label">Birthdate Match</span>
+                            <span class="metric-value warning">67.5% (135/200)</span>
+                        </div>
+                        <div id="dd-birthdate" class="drill-down">
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Correctly matched</span>
+                                <span class="drill-down-value good">135 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing in source CSV (~13% randomly nulled)</span>
+                                <span class="drill-down-value gap">26 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Unparseable date formats</span>
+                                <span class="drill-down-value gap">26 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Ambiguous dates (DD-MM vs MM-DD)</span>
+                                <span class="drill-down-value gap">~13 patients</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Formats successfully parsed</span>
+                                <span class="drill-down-value neutral">DD.MM.YYYY, YYYY/MM/DD, YYYY-MM-DD</span>
+                            </div>
+                            <div class="drill-down-note">
+                                The lowest score, and intentionally so: dates are the hardest data quality challenge. Ambiguous formats like <code>01-05-2019</code> (Jan 5 or May 1?) cannot be resolved without context. This is a realistic real-world ETL problem.
+                            </div>
+                        </div>
+
+                        <div class="metric-row expandable" onclick="toggleDrillDown('dd-icd')">
+                            <span class="metric-label">ICD-10-GM Codes</span>
+                            <span class="metric-value success">91.5% (366/400)</span>
+                        </div>
+                        <div id="dd-icd" class="drill-down">
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Valid ICD-10-GM codes</span>
+                                <span class="drill-down-value good">366 conditions</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing codes in source CSV (~8.5% nulled)</span>
+                                <span class="drill-down-value gap">34 conditions</span>
+                            </div>
+                            <div class="drill-down-stat">
+                                <span class="drill-down-label">Missing CodeSystem (inferred from code)</span>
+                                <span class="drill-down-value neutral">47 conditions</span>
+                            </div>
+                            <div class="drill-down-note">
+                                When the CodeSystem column was empty but a valid ICD-10 code was present (e.g. <code>M80.01</code>), the pipeline inferred <code>http://fhir.de/CodeSystem/bfarm/icd-10-gm</code> from the code format.
+                            </div>
+                        </div>
+
                         <div class="metric-row">
                             <span class="metric-label">Overall Data Recovery</span>
                             <span class="metric-value success">87.7% <span class="badge badge-success">EXCELLENT</span></span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">Patient Demographics</span>
-                            <span class="metric-value success">89.0%</span>
-                        </div>
-                        <div class="metric-row">
-                            <span class="metric-label">ICD-10-GM Codes</span>
-                            <span class="metric-value success">91.5%</span>
                         </div>
                         <div class="metric-row">
                             <span class="metric-label">Quality Score</span>
@@ -579,88 +1116,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-            <!-- FHIR Resources Examples -->
-            <div class="section">
-                <h2 class="section-title">Sample FHIR Resources</h2>
-                <div class="card">
-                    <div class="tabs">
-                        <button class="tab active" onclick="showTab('patient')">Patient</button>
-                        <button class="tab" onclick="showTab('condition')">Condition</button>
-                        <button class="tab" onclick="showTab('medication')">Medication</button>
-                    </div>
-
-                    <div id="patient" class="tab-content active">
-                        <h4 style="margin-bottom: 10px;">Patient Resource (FHIR R4)</h4>
-                        <div class="code-block">{
-  "resourceType": "Patient",
-  "id": "00001",
-  "identifier": [{
-    "system": "https://POLARWP.de/pid",
-    "value": "00001"
-  }],
-  "name": [{
-    "use": "official",
-    "family": "Mustermann",
-    "given": ["Max_01"]
-  }],
-  "gender": "male",
-  "birthDate": "1950-01-01",
-  "address": [{
-    "type": "both",
-    "line": ["Musterstraße 1"],
-    "city": "Bonn",
-    "postalCode": "53121",
-    "country": "DE"
-  }]
-}</div>
-                    </div>
-
-                    <div id="condition" class="tab-content">
-                        <h4 style="margin-bottom: 10px;">Condition Resource (ICD-10-GM)</h4>
-                        <div class="code-block">{
-  "resourceType": "Condition",
-  "id": "00001",
-  "subject": {
-    "reference": "Patient/00001"
-  },
-  "clinicalStatus": {
-    "coding": [{
-      "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
-      "code": "active"
-    }]
-  },
-  "code": {
-    "coding": [{
-      "system": "http://fhir.de/CodeSystem/bfarm/icd-10-gm",
-      "code": "M80.00",
-      "display": "Osteroporose"
-    }],
-    "text": "Osteroporose"
-  },
-  "recordedDate": "2019-01-01"
-}</div>
-                    </div>
-
-                    <div id="medication" class="tab-content">
-                        <h4 style="margin-bottom: 10px;">MedicationAdministration (ATC Codes)</h4>
-                        <div class="code-block">{
-  "resourceType": "MedicationAdministration",
-  "id": "PAT1",
-  "status": "completed",
-  "subject": {
-    "reference": "Patient/00001"
-  },
-  "medication": {
-    "reference": {
-      "reference": "Medication/Medication-N06AA09"
-    }
-  },
-  "occurenceDateTime": "2019-01-01"
-}</div>
-                    </div>
                 </div>
             </div>
 
@@ -850,19 +1305,24 @@ open dashboard/index.html
             }
         });
 
-        // Tab switching
-        function showTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
+        // Transformation Viewer navigation
+        function showViewer(panelId) {
+            document.querySelectorAll('.viewer-panel').forEach(function(p) {
+                p.classList.remove('active');
             });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
+            document.querySelectorAll('.viewer-btn').forEach(function(b) {
+                b.classList.remove('active');
             });
-
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
+            document.getElementById(panelId).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        // Quality drill-down expand/collapse
+        function toggleDrillDown(id) {
+            var dd = document.getElementById(id);
+            var row = dd.previousElementSibling;
+            dd.classList.toggle('open');
+            row.classList.toggle('expanded');
         }
     </script>
 </body>
