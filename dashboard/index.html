@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Data Integration Pipeline - Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
@@ -13,10 +16,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f0e8;
             min-height: 100vh;
             padding: 20px;
         }
@@ -26,21 +29,22 @@
             margin: 0 auto;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c2319;
             color: white;
             padding: 40px;
             text-align: center;
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
             font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         header p {
@@ -53,7 +57,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             padding: 40px;
-            background: #f8f9fa;
+            background: #faf6f0;
         }
 
         .stat-card {
@@ -73,10 +77,7 @@
         .stat-number {
             font-size: 3rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #7a4f28;
         }
 
         .stat-label {
@@ -98,8 +99,8 @@
         .section-title {
             font-size: 1.8rem;
             margin-bottom: 20px;
-            color: #2d3748;
-            border-left: 4px solid #667eea;
+            color: #2a1f14;
+            border-left: 4px solid #7a4f28;
             padding-left: 15px;
         }
 
@@ -112,7 +113,7 @@
 
         .card {
             background: white;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e0d5c8;
             border-radius: 8px;
             padding: 25px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -122,7 +123,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #2d3748;
+            color: #2a1f14;
         }
 
         .chart-container {
@@ -135,7 +136,7 @@
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid #edf2f7;
+            border-bottom: 1px solid #ede5da;
         }
 
         .metric-row:last-child {
@@ -143,21 +144,21 @@
         }
 
         .metric-label {
-            color: #4a5568;
+            color: #4a3828;
             font-weight: 500;
         }
 
         .metric-value {
             font-weight: 600;
-            color: #2d3748;
+            color: #2a1f14;
         }
 
         .metric-value.success {
-            color: #48bb78;
+            color: #4e7a3e;
         }
 
         .metric-value.warning {
-            color: #ed8936;
+            color: #9a7209;
         }
 
         .badge {
@@ -169,23 +170,23 @@
         }
 
         .badge-success {
-            background: #c6f6d5;
-            color: #22543d;
+            background: #dce8d4;
+            color: #3d5a2e;
         }
 
         .badge-warning {
-            background: #feebc8;
-            color: #7c2d12;
+            background: #f0e4cc;
+            color: #7a5a2e;
         }
 
         .badge-info {
-            background: #bee3f8;
-            color: #2c5282;
+            background: #e8ddd0;
+            color: #7a4f28;
         }
 
         .code-block {
-            background: #2d3748;
-            color: #e2e8f0;
+            background: #2a1f14;
+            color: #e0d5c8;
             padding: 20px;
             border-radius: 6px;
             overflow-x: auto;
@@ -196,7 +197,7 @@
         }
 
         .highlight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2a1f14;
             color: white;
             padding: 30px;
             border-radius: 8px;
@@ -229,7 +230,7 @@
 
         .tabs {
             display: flex;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #e0d5c8;
             margin-bottom: 20px;
         }
 
@@ -239,18 +240,18 @@
             border: none;
             background: none;
             font-size: 1rem;
-            color: #4a5568;
+            color: #4a3828;
             border-bottom: 3px solid transparent;
             transition: all 0.2s;
         }
 
         .tab:hover {
-            color: #667eea;
+            color: #7a4f28;
         }
 
         .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
+            color: #7a4f28;
+            border-bottom-color: #7a4f28;
             font-weight: 600;
         }
 
@@ -263,14 +264,14 @@
         }
 
         footer {
-            background: #2d3748;
+            background: #2c2319;
             color: white;
             padding: 30px;
             text-align: center;
         }
 
         footer a {
-            color: #667eea;
+            color: #c4a67a;
             text-decoration: none;
         }
 
@@ -288,17 +289,17 @@
         .comparison-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e0d5c8;
         }
 
         .comparison-table th {
-            background: #f7fafc;
+            background: #faf7f2;
             font-weight: 600;
-            color: #2d3748;
+            color: #2a1f14;
         }
 
         .comparison-table tr:hover {
-            background: #f7fafc;
+            background: #faf7f2;
         }
 
         /* Transformation Viewer */
@@ -311,10 +312,10 @@
 
         .viewer-btn {
             padding: 8px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #e0d5c8;
             border-radius: 6px;
             background: white;
-            color: #4a5568;
+            color: #4a3828;
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 500;
@@ -322,13 +323,13 @@
         }
 
         .viewer-btn:hover {
-            border-color: #667eea;
-            color: #667eea;
+            border-color: #7a4f28;
+            color: #7a4f28;
         }
 
         .viewer-btn.active {
-            background: #667eea;
-            border-color: #667eea;
+            background: #7a4f28;
+            border-color: #7a4f28;
             color: white;
         }
 
@@ -362,13 +363,13 @@
         }
 
         .transform-side.messy .transform-side-header {
-            background: #fed7d7;
-            color: #9b2c2c;
+            background: #f0ddd0;
+            color: #8b4a2a;
         }
 
         .transform-side.clean .transform-side-header {
-            background: #c6f6d5;
-            color: #22543d;
+            background: #dce8d4;
+            color: #3d5a2e;
         }
 
         .transform-side-body {
@@ -376,10 +377,10 @@
             font-family: 'Courier New', monospace;
             font-size: 0.85rem;
             line-height: 1.6;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e0d5c8;
             border-top: none;
             border-radius: 0 0 6px 6px;
-            background: #f7fafc;
+            background: #faf7f2;
         }
 
         .field-row {
@@ -389,24 +390,24 @@
         }
 
         .field-name {
-            color: #718096;
+            color: #7a6b5a;
             font-weight: 500;
         }
 
         .field-value {
-            color: #2d3748;
+            color: #2a1f14;
             font-weight: 600;
         }
 
         .field-value.changed {
-            color: #22543d;
-            background: #c6f6d5;
+            color: #3d5a2e;
+            background: #dce8d4;
             padding: 1px 6px;
             border-radius: 3px;
         }
 
         .field-value.missing {
-            color: #9b2c2c;
+            color: #8b4a2a;
             font-style: italic;
             opacity: 0.7;
         }
@@ -415,7 +416,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #667eea;
+            color: #7a4f28;
             font-size: 1.5rem;
             font-weight: bold;
             padding-top: 40px;
@@ -424,11 +425,11 @@
         .transform-annotations {
             margin-top: 12px;
             padding: 12px 16px;
-            background: #ebf8ff;
-            border-left: 3px solid #4299e1;
+            background: #f5efe5;
+            border-left: 3px solid #7a4f28;
             border-radius: 0 6px 6px 0;
             font-size: 0.85rem;
-            color: #2c5282;
+            color: #7a4f28;
         }
 
         .transform-annotations ul {
@@ -443,7 +444,7 @@
 
         .transform-annotations li::before {
             content: "\2192 ";
-            color: #4299e1;
+            color: #7a4f28;
             font-weight: bold;
         }
 
@@ -457,13 +458,13 @@
         }
 
         .metric-row.expandable:hover {
-            background: #f7fafc;
+            background: #faf7f2;
         }
 
         .metric-row.expandable .metric-label::after {
             content: " \25BC";
             font-size: 0.7rem;
-            color: #a0aec0;
+            color: #9a8a78;
             transition: transform 0.2s;
             display: inline-block;
             margin-left: 6px;
@@ -477,7 +478,7 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-            background: #f7fafc;
+            background: #faf7f2;
             border-radius: 6px;
             margin: 0 0 8px 0;
             font-size: 0.88rem;
@@ -486,14 +487,14 @@
         .drill-down.open {
             max-height: 500px;
             padding: 16px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e0d5c8;
         }
 
         .drill-down-stat {
             display: flex;
             justify-content: space-between;
             padding: 6px 0;
-            border-bottom: 1px solid #edf2f7;
+            border-bottom: 1px solid #ede5da;
         }
 
         .drill-down-stat:last-child {
@@ -501,25 +502,373 @@
         }
 
         .drill-down-label {
-            color: #4a5568;
+            color: #4a3828;
         }
 
         .drill-down-value {
             font-weight: 600;
         }
 
-        .drill-down-value.good { color: #38a169; }
-        .drill-down-value.neutral { color: #718096; }
-        .drill-down-value.gap { color: #dd6b20; }
+        .drill-down-value.good { color: #4e7a3e; }
+        .drill-down-value.neutral { color: #7a6b5a; }
+        .drill-down-value.gap { color: #9a7209; }
 
         .drill-down-note {
             margin-top: 10px;
             padding: 10px 12px;
-            background: #fffbeb;
-            border-left: 3px solid #ecc94b;
+            background: #faf5eb;
+            border-left: 3px solid #c4a060;
             border-radius: 0 4px 4px 0;
             font-size: 0.82rem;
-            color: #744210;
+            color: #6b5020;
+        }
+
+        /* Table of Contents */
+        .toc {
+            padding: 25px 40px;
+            background: white;
+            border-bottom: 1px solid #e0d5c8;
+        }
+
+        .toc-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #9a8a78;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .toc-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 20px;
+        }
+
+        .toc-links a {
+            color: #7a4f28;
+            text-decoration: none;
+            font-size: 0.88rem;
+            padding: 3px 0;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s;
+        }
+
+        .toc-links a:hover {
+            border-bottom-color: #7a4f28;
+        }
+
+        /* Skills Alignment Section */
+        .skills-grid {
+            display: grid;
+            gap: 0;
+            border: 1px solid #e0d5c8;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .skills-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr;
+            border-bottom: 1px solid #e0d5c8;
+        }
+
+        .skills-row:last-child {
+            border-bottom: none;
+        }
+
+        .skills-row.header {
+            background: #faf7f2;
+            font-weight: 600;
+            color: #2a1f14;
+        }
+
+        .skills-cell {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            color: #4a3828;
+            line-height: 1.5;
+            border-right: 1px solid #e0d5c8;
+        }
+
+        .skills-cell:last-child {
+            border-right: none;
+        }
+
+        .skills-cell.req {
+            background: #faf7f2;
+            font-weight: 600;
+            color: #2a1f14;
+            font-size: 0.85rem;
+        }
+
+        .skills-cell .evidence-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .evidence-tag.project {
+            background: #dce8d4;
+            color: #3d5a2e;
+        }
+
+        .evidence-tag.experience {
+            background: #e8ddd0;
+            color: #7a4f28;
+        }
+
+        /* Architecture Section */
+        .arch-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        .arch-tab {
+            flex: 1;
+            padding: 14px 24px;
+            border: 2px solid #e0d5c8;
+            background: #faf7f2;
+            color: #4a3828;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .arch-tab:first-child {
+            border-radius: 8px 0 0 0;
+            border-right: none;
+        }
+
+        .arch-tab:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .arch-tab.active {
+            background: white;
+            color: #7a4f28;
+            border-bottom-color: white;
+        }
+
+        .arch-tab:not(.active):hover {
+            background: #ede5da;
+        }
+
+        .arch-panel {
+            display: none;
+            border: 2px solid #e0d5c8;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 30px;
+            background: white;
+        }
+
+        .arch-panel.active {
+            display: block;
+        }
+
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .arch-node {
+            padding: 20px 24px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 180px;
+            max-width: 220px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .arch-node.demo {
+            background: #faf7f2;
+            border: 2px solid #e0d5c8;
+        }
+
+        .arch-node.prod {
+            background: #faf7f2;
+            border: 2px dashed #c4a67a;
+            cursor: pointer;
+        }
+
+        .arch-node.prod:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            border-color: #7a4f28;
+        }
+
+        .arch-node-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .arch-node-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #2a1f14;
+            margin-bottom: 4px;
+        }
+
+        .arch-node-subtitle {
+            font-size: 0.8rem;
+            color: #7a6b5a;
+            line-height: 1.4;
+        }
+
+        .arch-arrow {
+            font-size: 1.4rem;
+            color: #9a8a78;
+            padding: 0 12px;
+            font-weight: bold;
+        }
+
+        .arch-proposed-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #f5efe5;
+            color: #7a4f28;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 15px;
+        }
+
+        .arch-click-hint {
+            text-align: center;
+            color: #9a8a78;
+            font-size: 0.82rem;
+            margin-top: 15px;
+        }
+
+        /* Architecture Comparison Table */
+        .arch-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            font-size: 0.9rem;
+        }
+
+        .arch-comparison th {
+            padding: 10px 14px;
+            text-align: left;
+            background: #faf7f2;
+            font-weight: 600;
+            color: #2a1f14;
+            border-bottom: 2px solid #e0d5c8;
+        }
+
+        .arch-comparison td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #ede5da;
+            color: #4a3828;
+        }
+
+        .arch-comparison tr:hover {
+            background: #faf7f2;
+        }
+
+        .arch-comparison .col-demo {
+            color: #2a1f14;
+        }
+
+        .arch-comparison .col-prod {
+            color: #7a4f28;
+            font-style: italic;
+        }
+
+        /* Modal */
+        .arch-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .arch-modal-overlay.open {
+            display: flex;
+        }
+
+        .arch-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 520px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalIn 0.2s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .arch-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #9a8a78;
+            line-height: 1;
+        }
+
+        .arch-modal-close:hover {
+            color: #2a1f14;
+        }
+
+        .arch-modal h3 {
+            font-size: 1.3rem;
+            color: #2a1f14;
+            margin-bottom: 15px;
+        }
+
+        .arch-modal ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px 0;
+        }
+
+        .arch-modal li {
+            padding: 6px 0;
+            color: #4a3828;
+            font-size: 0.95rem;
+        }
+
+        .arch-modal li::before {
+            content: "\2713 ";
+            color: #4e7a3e;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .arch-modal-usecase {
+            padding: 14px 16px;
+            background: #f5f0e5;
+            border-left: 3px solid #4e7a3e;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88rem;
+            color: #4a6638;
+            line-height: 1.5;
         }
 
         @media (max-width: 768px) {
@@ -543,13 +892,41 @@
                 padding-top: 0;
                 transform: rotate(90deg);
             }
+
+            .skills-row {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-row.header {
+                display: none;
+            }
+
+            .skills-cell.req {
+                background: #ede5da;
+                padding-bottom: 4px;
+            }
+
+            .arch-flow {
+                flex-direction: column;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                padding: 8px 0;
+            }
+
+            .arch-node {
+                min-width: 0;
+                width: 100%;
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🏥 Medical Data Integration Pipeline</h1>
+            <h1>Medical Data Integration Pipeline</h1>
             <p>ETL Demonstration: Messy CSV → Clean HL7 FHIR R4 Resources</p>
             <p style="font-size: 0.95rem; margin-top: 10px; opacity: 0.9;">
                 Using Official German MII (Medizininformatik-Initiative) Test Data
@@ -557,11 +934,11 @@
             <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                 <a href="https://codeberg.org/research_coder/medical-data-integration-demo" target="_blank"
                    style="color: white; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 6px; font-weight: 500; transition: background 0.2s;">
-                    📦 View on Codeberg
+                    View on Codeberg
                 </a>
                 <a href="https://github.com/jeffcwolf/medical-data-integration-demo" target="_blank"
                    style="color: white; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 6px; font-weight: 500; transition: background 0.2s;">
-                    🐙 View on GitHub
+                    View on GitHub
                 </a>
             </div>
         </header>
@@ -585,33 +962,49 @@
             </div>
         </div>
 
+        <nav class="toc">
+            <div class="toc-title">Contents</div>
+            <div class="toc-links">
+                <a href="#about">About</a>
+                <a href="#overview">Project Overview</a>
+                <a href="#results">Transformation Results</a>
+                <a href="#viewer">Transformation Viewer</a>
+                <a href="#quality">Data Quality Metrics</a>
+                <a href="#issues">Issues Handled</a>
+                <a href="#alignment">Requirements Alignment</a>
+                <a href="#architecture">Production Architecture</a>
+                <a href="#tech">Technical Implementation</a>
+                <a href="#run">How to Run</a>
+            </div>
+        </nav>
+
         <div class="content">
             <!-- About Section -->
             <div class="section">
-                <h2 class="section-title">About This Project</h2>
+                <h2 id="about" class="section-title">About This Project</h2>
                 <div class="card">
-                    <p style="font-size: 1.05rem; color: #2d3748; line-height: 1.8; margin-bottom: 15px;">
-                        <strong>Purpose:</strong> This demoonstration project showcases the capability to transform
+                    <p style="font-size: 1.05rem; color: #2a1f14; line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Purpose:</strong> This demonstration project showcases the capability to transform
                         messy hospital data into FHIR-compliant format with comprehensive quality assurance.
                     </p>
-                    <p style="font-size: 1.05rem; color: #4a5568; line-height: 1.8;">
+                    <p style="font-size: 1.05rem; color: #4a3828; line-height: 1.8;">
                         <strong>Approach:</strong> Uses official German MII (Medizininformatik-Initiative) test data to demonstrate
-                        understanding of the German medical informatics ecosystem and standards that are central to the role.
+                        understanding of the German medical informatics ecosystem and interoperability standards.
                     </p>
                 </div>
             </div>
 
             <!-- Overview Section -->
             <div class="section">
-                <h2 class="section-title">Project Overview</h2>
-                <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 20px;">
+                <h2 id="overview" class="section-title">Project Overview</h2>
+                <p style="font-size: 1.1rem; color: #4a3828; margin-bottom: 20px;">
                     This project demonstrates a complete ETL pipeline that transforms messy hospital data
                     into HL7 FHIR R4 compliant resources, using official German MII test data from
                     the Medizininformatik-Initiative.
                 </p>
                 
                 <div class="highlight">
-                    <h3>🎯 "Reverse Engineering" Approach for Validation</h3>
+                    <h3>"Reverse Engineering" Approach for Validation</h3>
                     <p style="margin-bottom: 20px;">
                         Started with <strong>clean MII FHIR</strong> → Created <strong>messy CSV with realistic quality issues</strong> 
                         → Transformed back to <strong>clean FHIR</strong> → Validated against <strong>original gold standard</strong>
@@ -621,70 +1014,70 @@
                         <div class="highlight-item">
                             <strong>Phase 1</strong>
                             <span>Extract & "Break"</span>
-                            <small style="display: block; margin-top: 5px; color: #718096;">FHIR → Messy CSV</small>
+                            <small style="display: block; margin-top: 5px; color: #7a6b5a;">FHIR → Messy CSV</small>
                         </div>
                         <div class="highlight-item">
                             <strong>Phase 2</strong>
                             <span>Transform & Clean</span>
-                            <small style="display: block; margin-top: 5px; color: #718096;">CSV → Clean FHIR</small>
+                            <small style="display: block; margin-top: 5px; color: #7a6b5a;">CSV → Clean FHIR</small>
                         </div>
                         <div class="highlight-item">
                             <strong>Phase 3</strong>
                             <span>Validate</span>
-                            <small style="display: block; margin-top: 5px; color: #718096;">Compare to Gold Standard</small>
+                            <small style="display: block; margin-top: 5px; color: #7a6b5a;">Compare to Gold Standard</small>
                         </div>
                         <div class="highlight-item">
                             <strong>Result</strong>
                             <span>Quality Dashboard</span>
-                            <small style="display: block; margin-top: 5px; color: #718096;">Metrics & Visualizations</small>
+                            <small style="display: block; margin-top: 5px; color: #7a6b5a;">Metrics & Visualizations</small>
                         </div>
                     </div>
                     
                     <!-- Data Quality Issues -->
                     <div style="margin-top: 30px;">
-                        <h3>🔧 Data Quality Issues Handled</h3>
+                        <h3>Data Quality Issues Handled</h3>
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">ID Formats</strong>
-                                <small style="color: #4a5568;">P-001, PAT001, 00001 → PAT-00001</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">ID Formats</strong>
+                                <small style="color: #4a3828;">P-001, PAT001, 00001 → PAT-00001</small>
                             </div>
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Date Formats</strong>
-                                <small style="color: #4a5568;">DD.MM.YYYY, YYYY-MM-DD → ISO 8601</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">Date Formats</strong>
+                                <small style="color: #4a3828;">DD.MM.YYYY, YYYY-MM-DD → ISO 8601</small>
                             </div>
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Gender Values</strong>
-                                <small style="color: #4a5568;">M, male, männlich → standardized</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">Gender Values</strong>
+                                <small style="color: #4a3828;">M, male, männlich → standardized</small>
                             </div>
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Missing Data</strong>
-                                <small style="color: #4a5568;">10-15% nulls → handled gracefully</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">Missing Data</strong>
+                                <small style="color: #4a3828;">10-15% nulls → handled gracefully</small>
                             </div>
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">German Characters</strong>
-                                <small style="color: #4a5568;">ä, ö, ü, ß → UTF-8 encoding</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">German Characters</strong>
+                                <small style="color: #4a3828;">ä, ö, ü, ß → UTF-8 encoding</small>
                             </div>
-                            <div style="padding: 12px; background: #edf2f7; border-radius: 6px;">
-                                <strong style="display: block; color: #2d3748; margin-bottom: 4px;">Reference Integrity</strong>
-                                <small style="color: #4a5568;">Invalid IDs → logged & flagged</small>
+                            <div style="padding: 12px; background: #ede5da; border-radius: 6px;">
+                                <strong style="display: block; color: #2a1f14; margin-bottom: 4px;">Reference Integrity</strong>
+                                <small style="color: #4a3828;">Invalid IDs → logged & flagged</small>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Tech Stack -->
-                    <div style="margin-top: 25px; padding: 15px; background: #f7fafc; border-left: 4px solid #4299e1; border-radius: 4px;">
+                    <div style="margin-top: 25px; padding: 15px; background: #faf7f2; border-left: 4px solid #7a4f28; border-radius: 4px;">
                         <div style="margin-bottom: 8px;">
-                            <strong style="color: #2d3748;">Tech Stack:</strong> 
-                            <span style="color: #4a5568;">Python • pandas • fhir.resources (FHIR R4) • pytest • JavaScript/CSS/HTML</span>
+                            <strong style="color: #2a1f14;">Tech Stack:</strong> 
+                            <span style="color: #4a3828;">Python • pandas • fhir.resources (FHIR R4) • pytest • JavaScript/CSS/HTML</span>
                         </div>
                         <div>
-                            <strong style="color: #2d3748;">Data Source:</strong> 
+                            <strong style="color: #2a1f14;">Data Source:</strong> 
                             <a href="https://github.com/medizininformatik-initiative/kerndatensatz-testdaten" 
                                target="_blank" 
-                               style="color: #4299e1; text-decoration: none;">
+                               style="color: #7a4f28; text-decoration: none;">
                                 Official MII Kerndatensatz Test Data
                             </a>
-                            <span style="color: #718096;"> (1,650 FHIR bundles)</span>
+                            <span style="color: #7a6b5a;"> (1,650 FHIR bundles)</span>
                         </div>
                     </div>
                 </div>
@@ -692,7 +1085,7 @@
 
             <!-- Transformation Results -->
             <div class="section">
-                <h2 class="section-title">Transformation Results</h2>
+                <h2 id="results" class="section-title">Transformation Results</h2>
                 <div class="grid-2">
                     <div class="card">
                         <h3 class="card-title">Success Rates by Resource Type</h3>
@@ -728,8 +1121,8 @@
 
             <!-- Transformation Viewer -->
             <div class="section">
-                <h2 class="section-title">Transformation Viewer</h2>
-                <p style="color: #4a5568; margin-bottom: 20px;">
+                <h2 id="viewer" class="section-title">Transformation Viewer</h2>
+                <p style="color: #4a3828; margin-bottom: 20px;">
                     See exactly how the pipeline transforms messy CSV input into clean FHIR R4 resources.
                     Each example uses real data from the pipeline.
                 </p>
@@ -947,7 +1340,7 @@
 
             <!-- Data Quality Section -->
             <div class="section">
-                <h2 class="section-title">Data Quality Metrics</h2>
+                <h2 id="quality" class="section-title">Data Quality Metrics</h2>
                 <div class="grid-2">
                     <div class="card">
                         <h3 class="card-title">Validation Against Original FHIR</h3>
@@ -956,7 +1349,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">Quality Scores <span style="font-size: 0.75rem; color: #a0aec0; font-weight: 400;">(click to expand)</span></h3>
+                        <h3 class="card-title">Quality Scores <span style="font-size: 0.75rem; color: #9a8a78; font-weight: 400;">(click to expand)</span></h3>
 
                         <div class="metric-row expandable" onclick="toggleDrillDown('dd-gender')">
                             <span class="metric-label">Gender Match</span>
@@ -1072,7 +1465,7 @@
 
             <!-- Data Quality Issues Handled -->
             <div class="section">
-                <h2 class="section-title">Data Quality Issues Handled</h2>
+                <h2 id="issues" class="section-title">Data Quality Issues Handled</h2>
                 <div class="card">
                     <table class="comparison-table">
                         <thead>
@@ -1088,72 +1481,278 @@
                                 <td><strong>ID Format Variations</strong></td>
                                 <td><code>P-00001, PAT00002, 00003, WP1-00004</code></td>
                                 <td><code>00001, 00002, 00003, 00004</code></td>
-                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                                <td><span class="badge badge-success">Normalized</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Date Format Variations</strong></td>
                                 <td><code>01.01.1950, 1950/01/01, 01-01-1950</code></td>
                                 <td><code>1950-01-01 (ISO 8601)</code></td>
-                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                                <td><span class="badge badge-success">Normalized</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Gender Inconsistencies</strong></td>
                                 <td><code>M, m, male, männlich, W, weiblich</code></td>
                                 <td><code>male, female (FHIR valueSet)</code></td>
-                                <td><span class="badge badge-success">✓ Normalized</span></td>
+                                <td><span class="badge badge-success">Normalized</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Missing Data</strong></td>
                                 <td><code>~12% random missing values</code></td>
                                 <td><code>Handled with defaults or omitted</code></td>
-                                <td><span class="badge badge-warning">⚠ Partial</span></td>
+                                <td><span class="badge badge-warning">Partial</span></td>
                             </tr>
                             <tr>
                                 <td><strong>German Characters</strong></td>
                                 <td><code>Müller, Schröder, Weiß</code></td>
                                 <td><code>UTF-8 preserved</code></td>
-                                <td><span class="badge badge-success">✓ Preserved</span></td>
+                                <td><span class="badge badge-success">Preserved</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- How to Run -->
+            <!-- Skills Alignment -->
             <div class="section">
-                <h2 class="section-title">How to Run This Project</h2>
-                <div class="card">
-                    <h3 class="card-title">Quick Start</h3>
-                    <div class="code-block" style="background: #1a202c;">
-<span style="color: #68d391;"># 1. Clone the repository</span>
-git clone https://codeberg.org/YOUR-USERNAME/YOUR-REPO
-cd YOUR-REPO
+                <h2 id="alignment" class="section-title">Requirements Alignment</h2>
+                <p style="color: #4a3828; margin-bottom: 20px;">
+                    How this project and my broader experience map to core data engineering requirements.
+                </p>
 
-<span style="color: #68d391;"># 2. Install dependencies</span>
-pip install -r requirements.txt
-
-<span style="color: #68d391;"># 3. Run the extraction (FHIR → CSV)</span>
-python3 src/fhir_to_csv_extractor.py
-
-<span style="color: #68d391;"># 4. Run the transformation pipeline (CSV → FHIR)</span>
-PYTHONPATH=. python3 src/pipeline.py
-
-<span style="color: #68d391;"># 5. Validate against original FHIR</span>
-PYTHONPATH=. python3 src/validate_against_original.py
-
-<span style="color: #68d391;"># 6. View this dashboard</span>
-open dashboard/index.html
+                <div class="skills-grid">
+                    <div class="skills-row header">
+                        <div class="skills-cell">Requirement</div>
+                        <div class="skills-cell">Demonstrated in This Project</div>
+                        <div class="skills-cell">Additional Experience</div>
                     </div>
-                    <p style="margin-top: 15px; color: #4a5568;">
-                        <strong>Requirements:</strong> Python 3.9+, ~2GB disk space for test data<br>
-                        <strong>Execution time:</strong> ~2-3 minutes for full pipeline (200 patients)
+                    <div class="skills-row">
+                        <div class="skills-cell req">ETL/ELT Pipelines<br><small style="font-weight:400;color:#7a6b5a;">Spark &amp; NiFi</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            Complete ETL pipeline: FHIR &rarr; messy CSV &rarr; clean FHIR with validation. Production architecture section shows Spark + NiFi design.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            Large-scale ETL/ELT pipelines for ingesting, cleaning, enriching and indexing 413K+ texts into NoSQL databases and Elasticsearch.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">SQL &amp; Databases<br><small style="font-weight:400;color:#7a6b5a;">Datenbanken-Know-How</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            HAPI FHIR Server (PostgreSQL) proposed in production architecture; data modeling for FHIR resources.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            Flask web application with SQL and NoSQL databases. Elasticsearch query design and index optimization for large-scale collections.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Medical Data Standards<br><small style="font-weight:400;color:#7a6b5a;">FHIR, LOINC, OMOP</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            HL7 FHIR R4 resources, ICD-10-GM codes, ATC classification, MII Kerndatensatz profiles. OMOP CDM in production architecture.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            Analogous standards work: Dublin Core metadata, cross-source harmonisation, schema mapping, and semantic normalisation across heterogeneous datasets.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Programming<br><small style="font-weight:400;color:#7a6b5a;">Python, SQL, R, Java</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            Python (pandas, fhir.resources, pydantic), pytest, JavaScript/HTML/CSS. ~2,500 lines of tested code.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            2+ years production Python (Flask, NLP, ML). SQL for relational database work.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Distributed &amp; Cloud<br><small style="font-weight:400;color:#7a6b5a;">Kubernetes, Spark, Ansible</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            Production architecture proposes Spark cluster with horizontal scaling and fault tolerance.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            Deployment to Flemish Supercomputer Center (VSC) Tier-1 cloud: environment configuration, deployment coordination, operational constraints.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Quality Assurance<br><small style="font-weight:400;color:#7a6b5a;">Qualit&auml;tssicherung</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            Validation against gold standard, data quality drill-downs, 87.7% recovery rate with full transparency on gaps and causes.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            End-to-end data quality throughout research pipelines. Published digital humanities work requiring rigorous, auditable data provenance.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Documentation<br><small style="font-weight:400;color:#7a6b5a;">Lebende Dokumentation</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            This interactive dashboard <em>is</em> the living documentation: transformation viewer, quality drill-downs, architecture rationale.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            Extensive documentation practice across research publications. Structured, goal-oriented communication with both technical and non-technical stakeholders.
+                        </div>
+                    </div>
+                    <div class="skills-row">
+                        <div class="skills-cell req">Healthcare Domain<br><small style="font-weight:400;color:#7a6b5a;">Medical context</small></div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag project">Project</span>
+                            German medical informatics context: MII test data, German terminology, ICD-10-GM. Built from understanding of real DIC workflows.
+                        </div>
+                        <div class="skills-cell">
+                            <span class="evidence-tag experience">Experience</span>
+                            PhD in History of Medicine. Healthcare consulting (social determinants of health modeling). Python desktop application for a clinical researcher.
+                        </div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 15px; font-size: 0.85rem; color: #7a6b5a;">
+                    <span class="evidence-tag project" style="vertical-align: middle;">Project</span> = demonstrated in this repository &nbsp;&nbsp;
+                    <span class="evidence-tag experience" style="vertical-align: middle;">Experience</span> = from professional background
+                </p>
+            </div>
+
+            <!-- Production Architecture -->
+            <div class="section">
+                <h2 id="architecture" class="section-title">From Demo to Production Architecture</h2>
+                <p style="color: #4a3828; margin-bottom: 20px;">
+                    This demo uses a single-threaded Python pipeline. Below is how the same logic would be
+                    architected for production-scale medical data integration at a university hospital.
+                </p>
+
+                <div class="arch-tabs">
+                    <button class="arch-tab active" onclick="showArchTab('demo')">Demo Architecture</button>
+                    <button class="arch-tab" onclick="showArchTab('prod')">Production Architecture</button>
+                </div>
+
+                <!-- Demo Architecture Panel -->
+                <div id="arch-demo" class="arch-panel active">
+                    <div class="arch-flow">
+                        <div class="arch-node demo">
+                            <div class="arch-node-icon">&#128221;</div>
+                            <div class="arch-node-title">Manual Execution</div>
+                            <div class="arch-node-subtitle">python3 src/pipeline.py</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node demo">
+                            <div class="arch-node-icon">&#128013;</div>
+                            <div class="arch-node-title">Python Script</div>
+                            <div class="arch-node-subtitle">Sequential processing<br>1 core, ~2 GB RAM</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node demo">
+                            <div class="arch-node-icon">&#128196;</div>
+                            <div class="arch-node-title">CSV &rarr; FHIR</div>
+                            <div class="arch-node-subtitle">200 patients<br>pandas + fhir.resources</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node demo">
+                            <div class="arch-node-icon">&#128190;</div>
+                            <div class="arch-node-title">Local Filesystem</div>
+                            <div class="arch-node-subtitle">JSON files on disk</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #7a6b5a; font-size: 0.9rem; margin-top: 10px;">
+                        Suitable for demonstration, prototyping, and validation of transformation logic.
+                    </p>
+                </div>
+
+                <!-- Production Architecture Panel -->
+                <div id="arch-prod" class="arch-panel">
+                    <div class="arch-proposed-badge">Proposed Architecture</div>
+                    <div class="arch-flow">
+                        <div class="arch-node prod" onclick="openArchModal('nifi')">
+                            <div class="arch-node-icon">&#128260;</div>
+                            <div class="arch-node-title">Apache NiFi</div>
+                            <div class="arch-node-subtitle">Orchestration &amp; ingestion<br>Data provenance tracking</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node prod" onclick="openArchModal('spark')">
+                            <div class="arch-node-icon">&#9889;</div>
+                            <div class="arch-node-title">Apache Spark</div>
+                            <div class="arch-node-subtitle">Distributed transformation<br>4&ndash;8 nodes, 200K+ patients</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node prod" onclick="openArchModal('fhir')">
+                            <div class="arch-node-icon">&#127973;</div>
+                            <div class="arch-node-title">HAPI FHIR Server</div>
+                            <div class="arch-node-subtitle">Production data store<br>REST API + search</div>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node prod" onclick="openArchModal('analytics')">
+                            <div class="arch-node-icon">&#128202;</div>
+                            <div class="arch-node-title">Analytics Layer</div>
+                            <div class="arch-node-subtitle">Parquet / Data Lake<br>Research queries</div>
+                        </div>
+                    </div>
+                    <p class="arch-click-hint">Click any component to learn why it is needed</p>
+
+                    <table class="arch-comparison">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Demo Pipeline</th>
+                                <th>Production Pipeline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Orchestration</strong></td>
+                                <td class="col-demo">Manual CLI execution</td>
+                                <td class="col-prod">NiFi flow-based scheduling &amp; monitoring</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Processing</strong></td>
+                                <td class="col-demo">Single-threaded Python / pandas</td>
+                                <td class="col-prod">Spark distributed across cluster nodes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Scale</strong></td>
+                                <td class="col-demo">200 patients (~30 s)</td>
+                                <td class="col-prod">200K+ patients, horizontal scaling</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Storage</strong></td>
+                                <td class="col-demo">Local JSON files</td>
+                                <td class="col-prod">HAPI FHIR Server + Parquet data lake</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fault Tolerance</strong></td>
+                                <td class="col-demo">Script re-run on failure</td>
+                                <td class="col-prod">Automatic retry, checkpointing, dead-letter queues</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Monitoring</strong></td>
+                                <td class="col-demo">Console output + log files</td>
+                                <td class="col-prod">NiFi dashboard, Spark UI, alerting</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Research Export</strong></td>
+                                <td class="col-demo">JSON files for validation</td>
+                                <td class="col-prod">OMOP CDM + FHIR Bulk Export for multi-site studies</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 18px; font-size: 0.82rem; color: #7a6b5a; font-style: italic;">
+                        Based on industry best practices for FHIR data integration at German university hospitals
+                        and the MII consortium architecture.
                     </p>
                 </div>
             </div>
 
             <!-- Technical Implementation -->
             <div class="section">
-                <h2 class="section-title">Technical Implementation</h2>
+                <h2 id="tech" class="section-title">Technical Implementation</h2>
                 <div class="grid-2">
                     <div class="card">
                         <h3 class="card-title">Technologies Used</h3>
@@ -1181,29 +1780,137 @@ open dashboard/index.html
                     <div class="card">
                         <h3 class="card-title">Key Features</h3>
                         <ul style="list-style: none; padding: 0;">
-                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
-                                ✓ Data quality validation (completeness, consistency)
+                            <li style="padding: 10px 0; border-bottom: 1px solid #ede5da;">
+                                Data quality validation (completeness, consistency)
                             </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
-                                ✓ Referential integrity checks
+                            <li style="padding: 10px 0; border-bottom: 1px solid #ede5da;">
+                                Referential integrity checks
                             </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
-                                ✓ German medical terminology (ICD-10-GM, ATC)
+                            <li style="padding: 10px 0; border-bottom: 1px solid #ede5da;">
+                                German medical terminology (ICD-10-GM, ATC)
                             </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
-                                ✓ MII Kerndatensatz profile compliance
+                            <li style="padding: 10px 0; border-bottom: 1px solid #ede5da;">
+                                MII Kerndatensatz profile compliance
                             </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #edf2f7;">
-                                ✓ Comprehensive error handling
+                            <li style="padding: 10px 0; border-bottom: 1px solid #ede5da;">
+                                Comprehensive error handling
                             </li>
                             <li style="padding: 10px 0;">
-                                ✓ Validation against source data
+                                Validation against source data
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
+            <!-- How to Run -->
+            <div class="section">
+                <h2 id="run" class="section-title">How to Run This Project</h2>
+                <div class="card">
+                    <h3 class="card-title">Quick Start</h3>
+                    <div class="code-block" style="background: #2c2319;">
+<span style="color: #a0b88a;"># 1. Clone the repository</span>
+git clone https://codeberg.org/YOUR-USERNAME/YOUR-REPO
+cd YOUR-REPO
+
+<span style="color: #a0b88a;"># 2. Install dependencies</span>
+pip install -r requirements.txt
+
+<span style="color: #a0b88a;"># 3. Run the extraction (FHIR &rarr; CSV)</span>
+python3 src/fhir_to_csv_extractor.py
+
+<span style="color: #a0b88a;"># 4. Run the transformation pipeline (CSV &rarr; FHIR)</span>
+PYTHONPATH=. python3 src/pipeline.py
+
+<span style="color: #a0b88a;"># 5. Validate against original FHIR</span>
+PYTHONPATH=. python3 src/validate_against_original.py
+
+<span style="color: #a0b88a;"># 6. View this dashboard</span>
+open dashboard/index.html
+                    </div>
+                    <p style="margin-top: 15px; color: #4a3828;">
+                        <strong>Requirements:</strong> Python 3.9+, ~2GB disk space for test data<br>
+                        <strong>Execution time:</strong> ~2-3 minutes for full pipeline (200 patients)
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Architecture Modals -->
+        <div id="modal-nifi" class="arch-modal-overlay" onclick="closeArchModal(event, 'nifi')">
+            <div class="arch-modal" onclick="event.stopPropagation()">
+                <button class="arch-modal-close" onclick="closeArchModal(event, 'nifi')">&times;</button>
+                <h3>&#128260; Apache NiFi &mdash; Orchestration Layer</h3>
+                <ul>
+                    <li>Visual pipeline design &mdash; no code for simple data flows</li>
+                    <li>Automatic retry and configurable error handling</li>
+                    <li>Real-time monitoring dashboard with back-pressure</li>
+                    <li>Schedule-based execution (hourly, nightly, on-demand)</li>
+                    <li>Built-in data provenance &mdash; full audit trail for compliance</li>
+                </ul>
+                <div class="arch-modal-usecase">
+                    <strong>Use case:</strong> Automatically ingest new FHIR bundles arriving each night from
+                    hospital source systems, validate structure, route errors to the data quality team,
+                    and forward clean data to Spark for transformation.
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-spark" class="arch-modal-overlay" onclick="closeArchModal(event, 'spark')">
+            <div class="arch-modal" onclick="event.stopPropagation()">
+                <button class="arch-modal-close" onclick="closeArchModal(event, 'spark')">&times;</button>
+                <h3>&#9889; Apache Spark &mdash; Processing Layer</h3>
+                <ul>
+                    <li>Parallel processing distributed across cluster nodes</li>
+                    <li>In-memory computation for large-scale transformations</li>
+                    <li>Fault tolerance &mdash; automatic recovery from node failures</li>
+                    <li>Scales linearly with data volume (add nodes as hospital network grows)</li>
+                    <li>Native Parquet/Delta Lake support for analytics</li>
+                </ul>
+                <div class="arch-modal-usecase">
+                    <strong>Use case:</strong> Process 200K+ patient records across a multi-site hospital network
+                    in minutes instead of hours, applying the same transformation logic demonstrated in this
+                    demo at production scale.
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-fhir" class="arch-modal-overlay" onclick="closeArchModal(event, 'fhir')">
+            <div class="arch-modal" onclick="event.stopPropagation()">
+                <button class="arch-modal-close" onclick="closeArchModal(event, 'fhir')">&times;</button>
+                <h3>&#127973; HAPI FHIR Server &mdash; Data Store</h3>
+                <ul>
+                    <li>Full FHIR R4 REST API with search and validation</li>
+                    <li>MII profile support (Kerndatensatz resources)</li>
+                    <li>Terminology services (ICD-10-GM, LOINC, ATC lookups)</li>
+                    <li>Subscription support for downstream consumers</li>
+                    <li>Enterprise-grade persistence (PostgreSQL backend)</li>
+                </ul>
+                <div class="arch-modal-usecase">
+                    <strong>Use case:</strong> Serve as the central FHIR repository for the Data Integration
+                    Center, providing standards-compliant access for research platforms, clinical
+                    decision support, and cross-site queries within the MII consortium.
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-analytics" class="arch-modal-overlay" onclick="closeArchModal(event, 'analytics')">
+            <div class="arch-modal" onclick="event.stopPropagation()">
+                <button class="arch-modal-close" onclick="closeArchModal(event, 'analytics')">&times;</button>
+                <h3>&#128202; Analytics Layer &mdash; Research &amp; Reporting</h3>
+                <ul>
+                    <li>Parquet files for efficient columnar analytics</li>
+                    <li>Compatible with Spark SQL, Trino, and BI tools</li>
+                    <li>OMOP CDM export for multi-site research studies</li>
+                    <li>Data quality dashboards and trend monitoring</li>
+                </ul>
+                <div class="arch-modal-usecase">
+                    <strong>Use case:</strong> Enable researchers to run cohort queries across all
+                    integrated hospital data without impacting the FHIR server, supporting
+                    the MII Use Cases (POLAR, CORD, SMITH) with performant analytics.
+                </div>
+            </div>
         </div>
 
         <footer>
@@ -1235,14 +1942,14 @@ open dashboard/index.html
                     label: 'Success Rate (%)',
                     data: [100, 100, 100],
                     backgroundColor: [
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.8)',
-                        'rgba(72, 187, 120, 0.8)'
+                        'rgba(139, 94, 52, 0.75)',
+                        'rgba(170, 130, 80, 0.75)',
+                        'rgba(107, 143, 94, 0.75)'
                     ],
                     borderColor: [
-                        'rgba(102, 126, 234, 1)',
-                        'rgba(118, 75, 162, 1)',
-                        'rgba(72, 187, 120, 1)'
+                        'rgba(139, 94, 52, 1)',
+                        'rgba(170, 130, 80, 1)',
+                        'rgba(107, 143, 94, 1)'
                     ],
                     borderWidth: 2
                 }]
@@ -1278,10 +1985,10 @@ open dashboard/index.html
                 datasets: [{
                     data: [89.0, 86.5, 67.5, 91.5],
                     backgroundColor: [
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(118, 75, 162, 0.8)',
-                        'rgba(72, 187, 120, 0.8)',
-                        'rgba(237, 137, 54, 0.8)'
+                        'rgba(139, 94, 52, 0.75)',
+                        'rgba(170, 130, 80, 0.75)',
+                        'rgba(107, 143, 94, 0.75)',
+                        'rgba(196, 160, 96, 0.75)'
                     ],
                     borderWidth: 2,
                     borderColor: '#fff'
@@ -1324,6 +2031,42 @@ open dashboard/index.html
             dd.classList.toggle('open');
             row.classList.toggle('expanded');
         }
+
+        // Architecture tabs
+        function showArchTab(which) {
+            document.querySelectorAll('.arch-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.arch-panel').forEach(function(p) { p.classList.remove('active'); });
+            document.getElementById('arch-' + which).classList.add('active');
+            // activate the clicked tab button
+            var tabs = document.querySelectorAll('.arch-tab');
+            tabs.forEach(function(t) {
+                if ((which === 'demo' && t.textContent.indexOf('Demo') !== -1) ||
+                    (which === 'prod' && t.textContent.indexOf('Production') !== -1)) {
+                    t.classList.add('active');
+                }
+            });
+        }
+
+        // Architecture modals
+        function openArchModal(component) {
+            document.getElementById('modal-' + component).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArchModal(event, component) {
+            document.getElementById('modal-' + component).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.arch-modal-overlay.open').forEach(function(m) {
+                    m.classList.remove('open');
+                });
+                document.body.style.overflow = '';
+            }
+        });
     </script>
 </body>
 </html>
